@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Azure Virtual Machines</title>
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="azure-services.css">
+    <!-- Font Awesome CDN for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-papmOEwNuewFQhvjp/wtja0+YV1FfJ9l1PUF6hYsdHzLrIZp4Gge80cN0kN7G3IuEjuIg3L2Vn6W3BtE1yB1Kg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <!-- Add more navigation links as needed -->
+        </ul>
+    </nav>
+
+    <h1><i class="fas fa-desktop"></i> Azure Virtual Machines</h1>
+    
+    <div class="section">
+        <h2>Description</h2>
+        <p>Azure Virtual Machines (VMs) is an Infrastructure as a Service (IaaS) offering that allows you to create and use virtual machines in the cloud. You can choose from a wide range of VM sizes and configurations, and run both Windows and Linux operating systems.</p>
+    </div>
+
+    <div class="section">
+        <h2>Key Features</h2>
+        <ul>
+            <li><strong>Flexibility:</strong> Full control over the operating system and installed software.</li>
+            <li><strong>Variety of OS Options:</strong> Support for Windows, Linux, and custom images.</li>
+            <li><strong>Scalability:</strong> Easily scale up or scale out your VMs to meet demand.</li>
+            <li><strong>High Availability:</strong> Use Availability Sets and Zones to ensure uptime.</li>
+            <li><strong>Integration:</strong> Seamless integration with other Azure services like Virtual Networks and Storage.</li>
+            <li><strong>Cost Management:</strong> Pay-as-you-go pricing and support for reserved instances.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Relevance</h2>
+        <p>Azure Virtual Machines are essential for workloads that require full control over the environment. They are ideal for hosting legacy applications, running custom software, or any scenario where you need the flexibility of a virtual machine without the overhead of managing physical hardware.</p>
+    </div>
+
+    <div class="section">
+        <h2>Use Cases</h2>
+        <ul>
+            <li>Migrating on-premises applications to the cloud.</li>
+            <li>Running applications that require specific configurations.</li>
+            <li>Development and testing environments.</li>
+            <li>Hosting databases, including SQL Server and Oracle.</li>
+            <li>Disaster recovery solutions.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Benefits</h2>
+        <ul>
+            <li><strong>Control:</strong> Full administrative access to the VM.</li>
+            <li><strong>Customization:</strong> Install any software and configure the VM as needed.</li>
+            <li><strong>Compatibility:</strong> Run applications that are not supported on Platform as a Service (PaaS) offerings.</li>
+            <li><strong>Isolation:</strong> Dedicated resources and network isolation.</li>
+            <li><strong>Hybrid Connectivity:</strong> Connect VMs to on-premises networks using VPN or ExpressRoute.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Integration with .NET</h2>
+        <p>Azure Virtual Machines can host .NET applications that require specific OS versions or configurations. They are suitable for hosting ASP.NET applications, Windows Services, or any .NET application that needs a customized environment. VMs can be configured to run IIS, install necessary .NET frameworks, and integrate with other Azure services like Azure SQL Database or Azure Storage.</p>
+    </div>
+
+    <div class="section">
+        <h2>Case Study: Migrating Legacy .NET Applications to Azure Virtual Machines</h2>
+        <h3>Background</h3>
+        <p>Contoso Ltd., a financial services company, has several legacy .NET applications running on Windows Server 2008 R2. These applications are critical for daily operations but are not compatible with newer operating systems without significant redevelopment.</p>
+
+        <h3>Challenge</h3>
+        <p>The on-premises servers hosting these applications were reaching end-of-life, leading to increased maintenance costs and risks of hardware failure. Contoso needed a solution to migrate these applications to the cloud without modifying the existing codebase.</p>
+
+        <h3>Solution</h3>
+        <p>As the .NET Architect, you proposed migrating the legacy applications to Azure Virtual Machines. The plan included:</p>
+        <ul>
+            <li>Creating Windows Server 2008 R2 VMs in Azure to maintain compatibility.</li>
+            <li>Using Azure Site Recovery for seamless migration of on-premises VMs to Azure.</li>
+            <li>Setting up Azure Virtual Network to securely connect VMs to on-premises resources.</li>
+            <li>Implementing Azure Backup for data protection and disaster recovery.</li>
+            <li>Utilizing Availability Sets to improve application uptime.</li>
+        </ul>
+
+        <h3>Implementation</h3>
+        <p>The team followed these steps:</p>
+        <ol>
+            <li><strong>Assessment:</strong> Evaluated the existing infrastructure and dependencies.</li>
+            <li><strong>Preparation:</strong> Set up Azure subscriptions, resource groups, and networking configurations.</li>
+            <li><strong>Migration:</strong> Used Azure Site Recovery to replicate and migrate VMs to Azure.</li>
+            <li><strong>Configuration:</strong> Updated configurations and connection strings to point to Azure resources.</li>
+            <li><strong>Testing:</strong> Performed thorough testing to ensure applications functioned correctly in the new environment.</li>
+            <li><strong>Go-Live:</strong> Switched over to the Azure-based VMs and decommissioned the on-premises servers.</li>
+        </ol>
+
+        <h3>Results</h3>
+        <p>After migration, Contoso achieved:</p>
+        <ul>
+            <li><strong>Cost Savings:</strong> Reduced capital expenditure on hardware and maintenance costs by 40%.</li>
+            <li><strong>Improved Reliability:</strong> Increased application uptime with Azure's infrastructure and Availability Sets.</li>
+            <li><strong>Scalability:</strong> Ability to scale resources up or down based on demand.</li>
+            <li><strong>Business Continuity:</strong> Enhanced disaster recovery capabilities with Azure Backup and Site Recovery.</li>
+            <li><strong>Security:</strong> Leveraged Azure's security features to protect applications and data.</li>
+        </ul>
+
+        <h3>Conclusion</h3>
+        <p>Migrating to Azure Virtual Machines allowed Contoso to extend the life of their legacy applications while benefiting from cloud infrastructure. This approach provided a cost-effective solution without the need for immediate application refactoring, giving the company time to plan for future modernization efforts.</p>
+    </div>
+
+    <div class="section">
+        <h2>Best Practices</h2>
+        <ol>
+            <li><strong>Use Managed Disks:</strong> Simplify storage management and gain features like snapshot support and enhanced performance.</li>
+            <li><strong>Implement Security Measures:</strong> Use Network Security Groups (NSGs), Azure Firewall, and Azure Security Center to protect VMs.</li>
+            <li><strong>Optimize Costs:</strong> Use Azure Advisor recommendations and consider reserved instances for predictable workloads.</li>
+            <li><strong>Monitor Performance:</strong> Utilize Azure Monitor and Log Analytics to track VM health and performance.</li>
+            <li><strong>Automate Management:</strong> Use Azure Automation and Desired State Configuration (DSC) for consistent VM configurations.</li>
+            <li><strong>Plan for High Availability:</strong> Deploy VMs across Availability Zones or Sets to reduce downtime.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Learn More</h2>
+        <p>For more detailed information, visit the official <a href="https://azure.microsoft.com/en-us/services/virtual-machines/" target="_blank" title="Azure Virtual Machines Documentation">Azure Virtual Machines Documentation</a>.</p>
+    </div>
+
+    <div class="section">
+        <h2>Conclusion</h2>
+        <p>Azure Virtual Machines provide the flexibility and control needed for a wide range of workloads. They are essential for scenarios where applications require specific configurations, or when migrating legacy systems to the cloud. By leveraging Azure VMs, .NET Architects can ensure their applications are secure, scalable, and highly available.</p>
+    </div>
+</body>
+</html>

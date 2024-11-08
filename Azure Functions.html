@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Azure Functions</title>
+    <!-- Link to External CSS -->
+    <link rel="stylesheet" href="azure-services.css">
+    <!-- Font Awesome CDN for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-papmOEwNuewFQhvjp/wtja0+YV1FfJ9l1PUF6hYsdHzLrIZp4Gge80cN0kN7G3IuEjuIg3L2Vn6W3BtE1yB1Kg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <!-- Add more navigation links as needed -->
+        </ul>
+    </nav>
+
+    <h1><i class="fas fa-bolt"></i> Azure Functions</h1>
+    
+    <div class="section">
+        <h2>Description</h2>
+        <p>Azure Functions is a serverless compute service that enables you to run event-driven code without managing infrastructure. It allows developers to execute code triggered by events or schedules.</p>
+    </div>
+
+    <!-- Existing sections (Key Features, Relevance, etc.) -->
+
+    <div class="section">
+        <h2>Case Study: Real-Time Data Processing with Azure Functions</h2>
+        <h3>Background</h3>
+        <p>Fabrikam Industries collects sensor data from IoT devices deployed across multiple locations. They needed to process this data in real-time to monitor equipment performance and predict maintenance needs.</p>
+        
+        <h3>Challenge</h3>
+        <p>The existing infrastructure couldn't handle the real-time data influx, leading to delays in processing and analysis. Fabrikam required a scalable solution that could process data as it arrived without significant infrastructure investment.</p>
+        
+        <h3>Solution</h3>
+        <p>As the .NET Architect, you designed a solution using Azure Functions to process incoming data. The plan included:</p>
+        <ul>
+            <li>Setting up Azure Event Hubs to ingest streaming data from IoT devices.</li>
+            <li>Creating Azure Functions with Event Hub triggers to process data in real-time.</li>
+            <li>Storing processed data in Azure Cosmos DB for fast retrieval and analysis.</li>
+            <li>Implementing Azure Stream Analytics for real-time analytics and dashboards.</li>
+        </ul>
+        
+        <h3>Implementation</h3>
+        <p>The team proceeded with the following steps:</p>
+        <ol>
+            <li>Configured Azure Event Hubs to receive data from IoT devices.</li>
+            <li>Developed Azure Functions in C# to process and transform the incoming data.</li>
+            <li>Set up Azure Cosmos DB with appropriate data models for storage.</li>
+            <li>Integrated Azure Stream Analytics to generate real-time insights and visualizations.</li>
+            <li>Ensured end-to-end monitoring using Azure Monitor and Application Insights.</li>
+        </ol>
+        
+        <h3>Results</h3>
+        <p>Post-implementation, Fabrikam achieved:</p>
+        <ul>
+            <li><strong>Real-Time Processing:</strong> Data was processed within milliseconds of arrival.</li>
+            <li><strong>Scalability:</strong> The serverless architecture automatically scaled to handle data spikes.</li>
+            <li><strong>Cost Efficiency:</strong> Pay-per-use model reduced costs compared to maintaining dedicated servers.</li>
+            <li><strong>Improved Insights:</strong> Real-time analytics enabled proactive maintenance and reduced downtime by 25%.</li>
+        </ul>
+    </div>
+
+    <!-- Existing sections (Learn More, Conclusion, etc.) -->
+</body>
+</html>
