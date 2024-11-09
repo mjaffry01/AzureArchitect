@@ -22,22 +22,14 @@
 <body>
     <!-- Header and Navigation Bar -->
     <header>
-        <!-- Hidden checkbox for toggling the menu -->
-        <input type="checkbox" id="menu-toggle" hidden>
-
         <nav class="navbar">
             <div class="logo">
                 <a href="index.html"><i class="fas fa-cloud"></i> Azure for .NET Architects</a>
             </div>
 
-            <!-- Hamburger Menu Icon -->
-            <label for="menu-toggle" class="hamburger">
-                <div></div>
-                <div></div>
-                <div></div>
-            </label>
+          
 
-            <ul class="nav-links">
+            <!-- <ul class="nav-links" id="nav-links">
                 <li><a href="#compute">Compute Services</a></li>
                 <li><a href="#storage">Storage Services</a></li>
                 <li><a href="#networking">Networking Services</a></li>
@@ -51,10 +43,10 @@
                 <li><a href="#analytics">Data Analytics</a></li>
                 <li><a href="#hybrid">Hybrid & Multi-Cloud</a></li>
                 <li><a href="#misc">Miscellaneous</a></li>
-            </ul>
+            </ul> -->
 
             <!-- Search Bar -->
-            <div class="search-bar">
+            <div class="search-bar" id="search-bar">
                 <input type="text" placeholder="Search services..." id="searchInput">
                 <button onclick="searchServices()"><i class="fas fa-search"></i></button>
             </div>
@@ -372,8 +364,20 @@
         </footer>
     </main>
 
-    <!-- JavaScript for Search Functionality -->
+    <!-- JavaScript for Navbar Toggle and Search Functionality -->
     <script>
+        // Navbar Toggle Functionality
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const searchBar = document.getElementById('search-bar');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            searchBar.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Search Functionality
         function searchServices() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const services = document.querySelectorAll('.service');
