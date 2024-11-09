@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Essential Azure Services for .NET Architects</title>
     <!-- Link to External CSS -->
-    <link rel="stylesheet" href="azure-services-main.css">
+    <link rel="stylesheet" href="azure-services.css">
     <!-- Font Awesome CDN for Icons -->
     <link
       rel="stylesheet"
@@ -20,12 +20,23 @@
     <meta name="author" content="Your Name or Company">
 </head>
 <body>
-    <!-- Header with Navigation Bar -->
+    <!-- Header and Navigation Bar -->
     <header>
+        <!-- Hidden checkbox for toggling the menu -->
+        <input type="checkbox" id="menu-toggle" hidden>
+
         <nav class="navbar">
             <div class="logo">
                 <a href="index.html"><i class="fas fa-cloud"></i> Azure for .NET Architects</a>
             </div>
+
+            <!-- Hamburger Menu Icon -->
+            <label for="menu-toggle" class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </label>
+
             <ul class="nav-links">
                 <li><a href="#compute">Compute Services</a></li>
                 <li><a href="#storage">Storage Services</a></li>
@@ -41,6 +52,7 @@
                 <li><a href="#hybrid">Hybrid & Multi-Cloud</a></li>
                 <li><a href="#misc">Miscellaneous</a></li>
             </ul>
+
             <!-- Search Bar -->
             <div class="search-bar">
                 <input type="text" placeholder="Search services..." id="searchInput">
@@ -84,7 +96,6 @@
                     <h3><i class="fas fa-box"></i> <a href="azure-container-instances.html" title="Azure Container Instances (ACI)">Azure Container Instances (ACI)</a></h3>
                     <p>Run containers without managing servers. Quickly deploy containerized applications without orchestration, useful for burst workloads and testing.</p>
                 </article>
-
                 
                 <article class="service">
                     <h3><i class="fas fa-box"></i> <a href="Case Study - Choosing the Right Azure Compute Service.html" title="Case Study - Choosing the Right Azure Compute Service">Case Study - Choosing the Right Azure Compute Service</a></h3>
