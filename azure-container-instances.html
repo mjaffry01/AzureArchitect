@@ -43,6 +43,38 @@
     </div>
 
     <div class="section">
+        <h2>Azure Container Instances (ACI): Pros and Cons</h2>
+        
+        <h3>Key Features</h3>
+        <p>Azure Container Instances (ACI) is a lightweight, serverless container service designed for quick deployment and running containers without managing infrastructure.</p>
+    
+        <!-- Pros Section -->
+        <h3>Pros of Azure Container Instances</h3>
+        <ul>
+            <li><strong>No Infrastructure Management:</strong> Simplifies deployment by abstracting all infrastructure management.</li>
+            <li><strong>Fast and Simple Deployment:</strong> Launch containers in seconds, making it ideal for CI/CD pipelines and burstable workloads.</li>
+            <li><strong>Cost Efficiency:</strong> Pay-as-you-go pricing model; only pay for resources consumed.</li>
+            <li><strong>Built-in Auto-Scaling:</strong> Automatically adjusts resources based on demand.</li>
+            <li><strong>Integration with Azure Services:</strong> Seamless integration with Azure Virtual Networks, Monitor, and DevOps.</li>
+            <li><strong>Support for Windows and Linux:</strong> Offers flexibility with support for both Windows and Linux containers.</li>
+        </ul>
+    
+        <!-- Cons Section -->
+        <h3>Cons of Azure Container Instances</h3>
+        <ul>
+            <li><strong>Not Suitable for Complex Microservices:</strong> Lacks orchestration features like service discovery and auto-healing.</li>
+            <li><strong>Limited Control:</strong> Provides limited customization over the infrastructure and scaling policies.</li>
+            <li><strong>Higher Costs for Always-On Workloads:</strong> Can be more expensive for long-running, resource-intensive services.</li>
+            <li><strong>No Built-In Orchestration:</strong> Lacks support for orchestration features, service meshes, and load balancing.</li>
+            <li><strong>Networking Limitations:</strong> Limited networking features compared to AKS or VMs.</li>
+        </ul>
+    
+        <!-- Conclusion Section -->
+        <h3>Conclusion</h3>
+        <p>Azure Container Instances is best suited for simple, short-lived, and burstable workloads. However, it may not be the best fit for complex, stateful, or always-on services that require advanced orchestration and control. For those scenarios, consider using Azure Kubernetes Service (AKS) or Azure Virtual Machines.</p>
+    </div>
+    
+    <div class="section">
         <h2>Relevance</h2>
         <p>Azure Container Instances is ideal for scenarios where you need to run containers without the overhead of managing orchestration platforms like Kubernetes. It's perfect for running simple tasks, burst workloads, or as part of a serverless architecture.</p>
     </div>
@@ -130,6 +162,72 @@
             <li><strong>Network Integration:</strong> Leverage virtual network integration for secure communication with other Azure resources.</li>
             <li><strong>Handle State Appropriately:</strong> Containers in ACI are stateless; use external storage like Azure Files or Blob Storage for persistent data.</li>
         </ol>
+    </div>
+
+    <div class="section">
+        <h2>Case Study: Choosing Azure Container Instances (ACI) Over Other Services</h2>
+        
+        <h3>Client Background</h3>
+        <p>A rapidly growing FinTech startup needed a solution to process large batches of financial data in real-time for their clients. They required a scalable, cost-effective solution that could handle unpredictable workloads.</p>
+        
+        <h3>Challenges Faced</h3>
+        <ul>
+            <li>Handling unpredictable traffic spikes efficiently.</li>
+            <li>Ensuring cost-effective scaling for burst workloads.</li>
+            <li>Rapid deployment of containers for data processing.</li>
+            <li>Stateless workloads requiring short-term compute resources.</li>
+        </ul>
+        
+        <h3>Why Azure Container Instances (ACI) Was Chosen</h3>
+        <ul>
+            <li><strong>Fast, serverless deployment:</strong> Minimal infrastructure management with rapid container deployment.</li>
+            <li><strong>Cost efficiency:</strong> Pay-as-you-go pricing ensures lower costs during idle periods.</li>
+            <li><strong>Integration with CI/CD pipelines:</strong> Seamless integration for automated deployments.</li>
+            <li><strong>Optimized for stateless batch processing:</strong> Ideal for short-lived, burstable workloads.</li>
+        </ul>
+        
+        <h3>Why Other Services Were Not Chosen</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Reason Not Chosen</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Azure Kubernetes Service (AKS)</td>
+                    <td>Too complex for stateless, short-lived tasks. High setup and management overhead.</td>
+                </tr>
+                <tr>
+                    <td>Azure App Services</td>
+                    <td>Not optimized for batch processing workloads; best for web apps and APIs.</td>
+                </tr>
+                <tr>
+                    <td>Azure Functions</td>
+                    <td>Cold start latency and limited control over the environment made it unsuitable.</td>
+                </tr>
+                <tr>
+                    <td>Azure Service Fabric</td>
+                    <td>Overkill for simple, stateless workloads. Better suited for complex, stateful applications.</td>
+                </tr>
+                <tr>
+                    <td>Azure Virtual Machines</td>
+                    <td>Slower scaling and high maintenance overhead for continuous workloads.</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>Implementation</h3>
+        <p>The FinTech startup containerized their data processing applications using Docker. They deployed containers using ACI for on-demand, burstable workloads and integrated the solution with their CI/CD pipeline.</p>
+        
+        <h3>Results and Benefits</h3>
+        <ul>
+            <li><strong>Cost Savings:</strong> Reduced compute costs by 30% due to pay-as-you-go pricing.</li>
+            <li><strong>Faster Processing:</strong> Containers spun up in seconds, allowing efficient handling of burst traffic.</li>
+            <li><strong>Improved Productivity:</strong> Simplified infrastructure management enabled faster releases.</li>
+            <li><strong>Scalability:</strong> Seamless scaling with demand, allowing the startup to handle more clients without additional infrastructure investments.</li>
+        </ul>
     </div>
 
     <div class="section">

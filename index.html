@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Services a .NET Architect Needs to Know in Azure</title>
+    <title>Essential Azure Services for .NET Architects</title>
     <!-- Link to External CSS -->
-    <link rel="stylesheet" href="azure-services.css">
+    <link rel="stylesheet" href="azure-services-main.css">
     <!-- Font Awesome CDN for Icons -->
     <link
       rel="stylesheet"
@@ -13,312 +13,377 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- Meta Tags for SEO and Responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comprehensive guide to essential Azure services for .NET Architects, including Compute, Storage, Networking, DevOps, Security, and more.">
+    <meta name="keywords" content="Azure, .NET Architect, Azure Services, Cloud Computing, Azure Compute Services, Azure Storage Services, DevOps, Azure Security">
+    <meta name="author" content="Your Name or Company">
 </head>
 <body>
-    <h1><i class="fas fa-cloud"></i> Services a .NET Architect Needs to Know in Azure</h1>
+    <!-- Header with Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="index.html"><i class="fas fa-cloud"></i> Azure for .NET Architects</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#compute">Compute Services</a></li>
+                <li><a href="#storage">Storage Services</a></li>
+                <li><a href="#networking">Networking Services</a></li>
+                <li><a href="#devops">DevOps & CI/CD</a></li>
+                <li><a href="#security">Identity & Security</a></li>
+                <li><a href="#monitoring">Monitoring & Diagnostics</a></li>
+                <li><a href="#messaging">Messaging & Integration</a></li>
+                <li><a href="#ai">AI & Machine Learning</a></li>
+                <li><a href="#serverless">Serverless Architectures</a></li>
+                <li><a href="#content-delivery">Content Delivery</a></li>
+                <li><a href="#analytics">Data Analytics</a></li>
+                <li><a href="#hybrid">Hybrid & Multi-Cloud</a></li>
+                <li><a href="#misc">Miscellaneous</a></li>
+            </ul>
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" placeholder="Search services..." id="searchInput">
+                <button onclick="searchServices()"><i class="fas fa-search"></i></button>
+            </div>
+        </nav>
+    </header>
 
-    <div class="section">
-        <h2><i class="fas fa-cpu icon-category"></i> 1. Compute Services</h2>
+    <!-- Main Content -->
+    <main>
+        <section class="intro">
+            <h1><i class="fas fa-cloud"></i> Essential Azure Services for .NET Architects</h1>
+            <p>As a .NET Architect, leveraging the right Azure services is crucial for building scalable, secure, and high-performance applications. This guide provides an overview of the essential Azure services you need to master, categorized for easy navigation.</p>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-server"></i> <a href="azure-app-service.html" title="Azure App Service">Azure App Service</a></h3>
-            <p><strong>Description:</strong> A fully managed platform for building, deploying, and scaling web apps and APIs.</p>
-            <p><strong>Relevance:</strong> Ideal for hosting ASP.NET Core applications with features like auto-scaling, continuous deployment, and integrated authentication.</p>
-        </div>
+        <!-- Compute Services Section -->
+        <section id="compute" class="section">
+            <h2><i class="fas fa-cpu"></i> 1. Compute Services</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-server"></i> <a href="azure-app-service.htm" title="Azure App Service">Azure App Service</a></h3>
+                    <p>A fully managed platform for building, deploying, and scaling web apps and APIs. Ideal for hosting ASP.NET Core applications with features like auto-scaling, continuous deployment, and integrated authentication.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-bolt"></i> <a href="azure-functions.html" title="Azure Functions">Azure Functions</a></h3>
-            <p><strong>Description:</strong> A serverless compute service that enables you to run event-driven code without managing infrastructure.</p>
-            <p><strong>Relevance:</strong> Useful for building microservices, processing background tasks, and integrating with other Azure services through triggers and bindings.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-bolt"></i> <a href="Azure Functions.html" title="Azure Functions">Azure Functions</a></h3>
+                    <p>A serverless compute service that enables you to run event-driven code without managing infrastructure. Useful for building microservices, processing background tasks, and integrating with other Azure services through triggers and bindings.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-container"></i> <a href="azure-kubernetes-service.html" title="Azure Kubernetes Service (AKS)">Azure Kubernetes Service (AKS)</a></h3>
-            <p><strong>Description:</strong> A managed Kubernetes container orchestration service.</p>
-            <p><strong>Relevance:</strong> Essential for deploying, managing, and scaling containerized .NET applications using Docker and Kubernetes.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-container"></i> <a href="Azure Kubernetes Service (AKS).html" title="Azure Kubernetes Service (AKS)">Azure Kubernetes Service (AKS)</a></h3>
+                    <p>A managed Kubernetes container orchestration service. Essential for deploying, managing, and scaling containerized .NET applications using Docker and Kubernetes.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-desktop"></i> <a href="azure-virtual-machines.html" title="Azure Virtual Machines">Azure Virtual Machines</a></h3>
-            <p><strong>Description:</strong> Provides Infrastructure as a Service (IaaS) for running Windows or Linux VMs.</p>
-            <p><strong>Relevance:</strong> Useful for legacy applications or scenarios requiring full control over the operating system and environment.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-desktop"></i> <a href="azure-virtual-machines.html" title="Azure Virtual Machines">Azure Virtual Machines</a></h3>
+                    <p>Provides Infrastructure as a Service (IaaS) for running Windows or Linux VMs. Useful for legacy applications or scenarios requiring full control over the operating system and environment.</p>
+                </article>
 
-        <!-- New Service Added -->
-        <div class="service">
-            <h3><i class="fas fa-box"></i> <a href="azure-container-instances.html" title="Azure Container Instances (ACI)">Azure Container Instances (ACI)</a></h3>
-            <p><strong>Description:</strong> Run containers without managing servers.</p>
-            <p><strong>Relevance:</strong> Quickly deploying containerized applications without orchestration, useful for burst workloads and testing.</p>
-        </div>
-    </div>
+                <article class="service">
+                    <h3><i class="fas fa-box"></i> <a href="azure-container-instances.html" title="Azure Container Instances (ACI)">Azure Container Instances (ACI)</a></h3>
+                    <p>Run containers without managing servers. Quickly deploy containerized applications without orchestration, useful for burst workloads and testing.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-database icon-category"></i> 2. Storage Services</h2>
+                
+                <article class="service">
+                    <h3><i class="fas fa-box"></i> <a href="Case Study - Choosing the Right Azure Compute Service.html" title="Case Study - Choosing the Right Azure Compute Service">Case Study - Choosing the Right Azure Compute Service</a></h3>
+                    <p>How did I choose what I choose?.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-database"></i> <a href="azure-sql-database.html" title="Azure SQL Database">Azure SQL Database</a></h3>
-            <p><strong>Description:</strong> A fully managed relational database service based on Microsoft SQL Server.</p>
-            <p><strong>Relevance:</strong> Primary choice for storing structured data for .NET applications with built-in high availability and security.</p>
-        </div>
+        <!-- Storage Services Section -->
+        <section id="storage" class="section">
+            <h2><i class="fas fa-database"></i> 2. Storage Services</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-database"></i> <a href="Azure SQL Database.html" title="Azure SQL Database">Azure SQL Database</a></h3>
+                    <p>A fully managed relational database service based on Microsoft SQL Server. Primary choice for storing structured data for .NET applications with built-in high availability and security.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-globe"></i> <a href="azure-cosmos-db.html" title="Azure Cosmos DB">Azure Cosmos DB</a></h3>
-            <p><strong>Description:</strong> A globally distributed, multi-model NoSQL database service.</p>
-            <p><strong>Relevance:</strong> Suitable for applications requiring low latency and high scalability with support for multiple data models (e.g., document, key-value, graph).</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-globe"></i> <a href="Azure Cosmos DB.html" title="Azure Cosmos DB">Azure Cosmos DB</a></h3>
+                    <p>A globally distributed, multi-model NoSQL database service. Suitable for applications requiring low latency and high scalability with support for multiple data models (e.g., document, key-value, graph).</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-box-open"></i> <a href="azure-blob-storage.html" title="Azure Blob Storage">Azure Blob Storage</a></h3>
-            <p><strong>Description:</strong> Object storage service for unstructured data.</p>
-            <p><strong>Relevance:</strong> Ideal for storing large amounts of binary data such as images, videos, and backups.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-box-open"></i> <a href="Azure Blob Storage.html" title="Azure Blob Storage">Azure Blob Storage</a></h3>
+                    <p>Object storage service for unstructured data. Ideal for storing large amounts of binary data such as images, videos, and backups.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-table"></i> <a href="azure-table-storage.html" title="Azure Table Storage">Azure Table Storage</a></h3>
-            <p><strong>Description:</strong> NoSQL key-value store for rapid development using massive semi-structured datasets.</p>
-            <p><strong>Relevance:</strong> Suitable for scenarios requiring high availability and scalability without complex querying needs.</p>
-        </div>
-    </div>
+                <article class="service">
+                    <h3><i class="fas fa-table"></i> <a href="Azure Table Storage.html" title="Azure Table Storage">Azure Table Storage</a></h3>
+                    <p>NoSQL key-value store for rapid development using massive semi-structured datasets. Suitable for scenarios requiring high availability and scalability without complex querying needs.</p>
+                </article>
+            </div>
+        </section>
 
-    <div class="section">
-        <h2><i class="fas fa-network-wired icon-category"></i> 3. Networking Services</h2>
+        <!-- Networking Services Section -->
+        <section id="networking" class="section">
+            <h2><i class="fas fa-network-wired"></i> 3. Networking Services</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-network-wired"></i> <a href="azure-virtual-network.html" title="Azure Virtual Network (VNet)">Azure Virtual Network (VNet)</a></h3>
+                    <p>Enables the creation of isolated networks within Azure. Essential for securing and managing the network architecture of .NET applications.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-network-wired"></i> <a href="azure-virtual-network.html" title="Azure Virtual Network (VNet)">Azure Virtual Network (VNet)</a></h3>
-            <p><strong>Description:</strong> Enables the creation of isolated networks within Azure.</p>
-            <p><strong>Relevance:</strong> Essential for securing and managing the network architecture of .NET applications.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-shield-alt"></i> <a href="azure-application-gateway.html" title="Azure Application Gateway">Azure Application Gateway</a></h3>
+                    <p>A web traffic load balancer with features like SSL termination and WAF (Web Application Firewall). Enhances application security and performance by managing incoming traffic effectively.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-shield-alt"></i> <a href="azure-application-gateway.html" title="Azure Application Gateway">Azure Application Gateway</a></h3>
-            <p><strong>Description:</strong> A web traffic load balancer with features like SSL termination and WAF (Web Application Firewall).</p>
-            <p><strong>Relevance:</strong> Enhances application security and performance by managing incoming traffic effectively.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-route"></i> <a href="azure-load-balancer.html" title="Azure Load Balancer">Azure Load Balancer</a></h3>
+                    <p>A Layer 4 load balancer that distributes incoming network traffic across multiple virtual machines. Ensures high availability and reliability by balancing traffic across multiple resources.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-route"></i> <a href="azure-load-balancer.html" title="Azure Load Balancer">Azure Load Balancer</a></h3>
-            <p><strong>Description:</strong> A Layer 4 load balancer that distributes incoming network traffic across multiple virtual machines.</p>
-            <p><strong>Relevance:</strong> Ensures high availability and reliability by balancing traffic across multiple resources.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-project-diagram"></i> <a href="azure-api-management.html" title="Azure API Management">Azure API Management</a></h3>
+                    <p>A service for creating, publishing, securing, and analyzing APIs. Critical for managing and exposing .NET APIs to internal or external consumers securely.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-project-diagram"></i> <a href="azure-api-management.html" title="Azure API Management">Azure API Management</a></h3>
-            <p><strong>Description:</strong> A service for creating, publishing, securing, and analyzing APIs.</p>
-            <p><strong>Relevance:</strong> Critical for managing and exposing .NET APIs to internal or external consumers securely.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-route"></i> <a href="azure-traffic-manager.html" title="Azure Traffic Manager">Azure Traffic Manager</a></h3>
+                    <p>A DNS-based traffic load balancer. Distributes traffic across multiple regions or services for high availability and responsiveness.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-route"></i> <a href="azure-traffic-manager.html" title="Azure Traffic Manager">Azure Traffic Manager</a></h3>
-            <p><strong>Description:</strong> A DNS-based traffic load balancer.</p>
-            <p><strong>Relevance:</strong> Distributes traffic across multiple regions or services for high availability and responsiveness.</p>
-        </div>
-    </div>
+        <!-- DevOps and CI/CD Section -->
+        <section id="devops" class="section">
+            <h2><i class="fas fa-tools"></i> 4. DevOps and CI/CD</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-rocket"></i> <a href="azure-devops.html" title="Azure DevOps">Azure DevOps</a></h3>
+                    <p>A suite of development tools including Azure Pipelines, Repos, Boards, and Artifacts. Facilitates continuous integration and continuous deployment (CI/CD) pipelines for .NET applications, along with project management and version control.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-tools icon-category"></i> 4. DevOps and CI/CD</h2>
+                <article class="service">
+                    <h3><i class="fab fa-github"></i> <a href="github-actions.html" title="GitHub Actions">GitHub Actions</a></h3>
+                    <p>CI/CD workflows integrated with GitHub repositories. Provides automation for building, testing, and deploying .NET applications directly from GitHub.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-rocket"></i> <a href="azure-devops.html" title="Azure DevOps">Azure DevOps</a></h3>
-            <p><strong>Description:</strong> A suite of development tools including Azure Pipelines, Repos, Boards, and Artifacts.</p>
-            <p><strong>Relevance:</strong> Facilitates continuous integration and continuous deployment (CI/CD) pipelines for .NET applications, along with project management and version control.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-box"></i> <a href="azure-artifacts.html" title="Azure Artifacts">Azure Artifacts</a></h3>
+                    <p>Package management for Maven, npm, NuGet, and Python packages. Manages dependencies and versioning for .NET projects efficiently.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fab fa-github"></i> <a href="github-actions.html" title="GitHub Actions">GitHub Actions</a></h3>
-            <p><strong>Description:</strong> CI/CD workflows integrated with GitHub repositories.</p>
-            <p><strong>Relevance:</strong> Provides automation for building, testing, and deploying .NET applications directly from GitHub.</p>
-        </div>
+        <!-- Identity and Security Section -->
+        <section id="security" class="section">
+            <h2><i class="fas fa-user-shield"></i> 5. Identity and Security</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-user-lock"></i> <a href="azure-active-directory.html" title="Azure Active Directory (Azure AD)">Azure Active Directory (Azure AD)</a></h3>
+                    <p>A comprehensive identity and access management service. Manages user authentication, authorization, and single sign-on (SSO) for .NET applications.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-box"></i> <a href="azure-artifacts.html" title="Azure Artifacts">Azure Artifacts</a></h3>
-            <p><strong>Description:</strong> Package management for Maven, npm, NuGet, and Python packages.</p>
-            <p><strong>Relevance:</strong> Manages dependencies and versioning for .NET projects efficiently.</p>
-        </div>
-    </div>
+                <article class="service">
+                    <h3><i class="fas fa-key"></i> <a href="azure-key-vault.html" title="Azure Key Vault">Azure Key Vault</a></h3>
+                    <p>A service for securely storing and accessing secrets, keys, and certificates. Protects sensitive information like connection strings and API keys used in .NET applications.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-user-shield icon-category"></i> 5. Identity and Security</h2>
+                <article class="service">
+                    <h3><i class="fas fa-shield-virus"></i> <a href="azure-security-center.html" title="Azure Security Center">Azure Security Center</a></h3>
+                    <p>Provides unified security management and advanced threat protection. Monitors and safeguards the security posture of .NET applications and the underlying infrastructure.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-user-lock"></i> <a href="azure-active-directory.html" title="Azure Active Directory (Azure AD)">Azure Active Directory (Azure AD)</a></h3>
-            <p><strong>Description:</strong> A comprehensive identity and access management service.</p>
-            <p><strong>Relevance:</strong> Manages user authentication, authorization, and single sign-on (SSO) for .NET applications.</p>
-        </div>
+        <!-- Monitoring and Diagnostics Section -->
+        <section id="monitoring" class="section">
+            <h2><i class="fas fa-chart-line"></i> 6. Monitoring and Diagnostics</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-chart-pie"></i> <a href="azure-monitor.html" title="Azure Monitor">Azure Monitor</a></h3>
+                    <p>A comprehensive monitoring service for applications and infrastructure. Tracks performance metrics, logs, and alerts for .NET applications to ensure reliability and performance.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-key"></i> <a href="azure-key-vault.html" title="Azure Key Vault">Azure Key Vault</a></h3>
-            <p><strong>Description:</strong> A service for securely storing and accessing secrets, keys, and certificates.</p>
-            <p><strong>Relevance:</strong> Protects sensitive information like connection strings and API keys used in .NET applications.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-eye"></i> <a href="application-insights.html" title="Application Insights">Application Insights</a></h3>
+                    <p>An extensible application performance management (APM) service. Provides deep insights into application performance, user behavior, and diagnostics for .NET applications.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-shield-virus"></i> <a href="azure-security-center.html" title="Azure Security Center">Azure Security Center</a></h3>
-            <p><strong>Description:</strong> Provides unified security management and advanced threat protection.</p>
-            <p><strong>Relevance:</strong> Monitors and safeguards the security posture of .NET applications and the underlying infrastructure.</p>
-        </div>
-    </div>
+                <article class="service">
+                    <h3><i class="fas fa-file-alt"></i> <a href="azure-log-analytics.html" title="Azure Log Analytics">Azure Log Analytics</a></h3>
+                    <p>Collects and analyzes log data from various sources. Enables advanced querying and visualization of logs for troubleshooting and optimizing .NET applications.</p>
+                </article>
+            </div>
+        </section>
 
-    <div class="section">
-        <h2><i class="fas fa-chart-line icon-category"></i> 6. Monitoring and Diagnostics</h2>
+        <!-- Messaging and Integration Section -->
+        <section id="messaging" class="section">
+            <h2><i class="fas fa-envelope"></i> 7. Messaging and Integration</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-envelope-open-text"></i> <a href="azure-service-bus.html" title="Azure Service Bus">Azure Service Bus</a></h3>
+                    <p>A fully managed enterprise message broker. Facilitates reliable communication between decoupled .NET application components through queues and topics.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-chart-pie"></i> <a href="azure-monitor.html" title="Azure Monitor">Azure Monitor</a></h3>
-            <p><strong>Description:</strong> Comprehensive monitoring for applications and infrastructure.</p>
-            <p><strong>Relevance:</strong> Tracks performance metrics, logs, and alerts for .NET applications to ensure reliability and performance.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-stream"></i> <a href="azure-event-grid.html" title="Azure Event Grid">Azure Event Grid</a></h3>
+                    <p>A fully managed event routing service. Enables reactive programming models by routing events from various sources to handlers, supporting event-driven .NET architectures.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-eye"></i> <a href="application-insights.html" title="Application Insights">Application Insights</a></h3>
-            <p><strong>Description:</strong> An extensible application performance management (APM) service.</p>
-            <p><strong>Relevance:</strong> Provides deep insights into application performance, user behavior, and diagnostics for .NET applications.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-project-diagram"></i> <a href="azure-logic-apps.html" title="Azure Logic Apps">Azure Logic Apps</a></h3>
+                    <p>A service for building automated workflows and integrations. Simplifies the integration of .NET applications with other services and systems without extensive code.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-file-alt"></i> <a href="azure-log-analytics.html" title="Azure Log Analytics">Azure Log Analytics</a></h3>
-            <p><strong>Description:</strong> Collects and analyzes log data from various sources.</p>
-            <p><strong>Relevance:</strong> Enables advanced querying and visualization of logs for troubleshooting and optimizing .NET applications.</p>
-        </div>
-    </div>
+        <!-- AI and Machine Learning Section -->
+        <section id="ai" class="section">
+            <h2><i class="fas fa-robot"></i> 8. AI and Machine Learning</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-brain"></i> <a href="azure-cognitive-services.html" title="Azure Cognitive Services">Azure Cognitive Services</a></h3>
+                    <p>A collection of APIs for adding intelligent features like vision, speech, language, and decision-making. Enhances .NET applications with AI capabilities without needing deep machine learning expertise.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-envelope icon-category"></i> 7. Messaging and Integration</h2>
+                <article class="service">
+                    <h3><i class="fas fa-flask"></i> <a href="azure-machine-learning.html" title="Azure Machine Learning">Azure Machine Learning</a></h3>
+                    <p>A cloud-based service for building, training, and deploying machine learning models. Allows .NET architects to integrate custom ML models into applications for advanced analytics and predictions.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-envelope-open-text"></i> <a href="azure-service-bus.html" title="Azure Service Bus">Azure Service Bus</a></h3>
-            <p><strong>Description:</strong> A fully managed enterprise message broker.</p>
-            <p><strong>Relevance:</strong> Facilitates reliable communication between decoupled .NET application components through queues and topics.</p>
-        </div>
+        <!-- Serverless and Event-Driven Architectures Section -->
+        <section id="serverless" class="section">
+            <h2><i class="fas fa-stream"></i> 9. Serverless and Event-Driven Architectures</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-stream"></i> <a href="azure-event-hubs.html" title="Azure Event Hubs">Azure Event Hubs</a></h3>
+                    <p>A big data streaming platform and event ingestion service. Manages large-scale event streaming for real-time analytics and processing in .NET applications.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-stream"></i> <a href="azure-event-grid.html" title="Azure Event Grid">Azure Event Grid</a></h3>
-            <p><strong>Description:</strong> A fully managed event routing service.</p>
-            <p><strong>Relevance:</strong> Enables reactive programming models by routing events from various sources to handlers, supporting event-driven .NET architectures.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-sync-alt"></i> <a href="azure-durable-functions.html" title="Azure Durable Functions">Azure Durable Functions</a></h3>
+                    <p>An extension of Azure Functions for writing stateful workflows. Enables complex orchestration and long-running processes within serverless .NET applications.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-project-diagram"></i> <a href="azure-logic-apps.html" title="Azure Logic Apps">Azure Logic Apps</a></h3>
-            <p><strong>Description:</strong> A service for building automated workflows and integrations.</p>
-            <p><strong>Relevance:</strong> Simplifies the integration of .NET applications with other services and systems without extensive code.</p>
-        </div>
-    </div>
+        <!-- Content Delivery and Front-End Section -->
+        <section id="content-delivery" class="section">
+            <h2><i class="fas fa-delivery-fast"></i> 10. Content Delivery and Front-End</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-network-wired"></i> <a href="azure-cdn.html" title="Azure Content Delivery Network (CDN)">Azure Content Delivery Network (CDN)</a></h3>
+                    <p>Delivers high-bandwidth content to users globally with low latency. Enhances the performance of .NET web applications by caching static assets closer to users.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-robot icon-category"></i> 8. AI and Machine Learning</h2>
+                <article class="service">
+                    <h3><i class="fas fa-door-open"></i> <a href="azure-front-door.html" title="Azure Front Door">Azure Front Door</a></h3>
+                    <p>A scalable and secure entry point for fast delivery of your global applications. Provides features like global load balancing, SSL offloading, and application acceleration for .NET applications.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-brain"></i> <a href="azure-cognitive-services.html" title="Azure Cognitive Services">Azure Cognitive Services</a></h3>
-            <p><strong>Description:</strong> A collection of APIs for adding intelligent features like vision, speech, language, and decision-making.</p>
-            <p><strong>Relevance:</strong> Enhances .NET applications with AI capabilities without needing deep machine learning expertise.</p>
-        </div>
+        <!-- Data Analytics and Big Data Section -->
+        <section id="analytics" class="section">
+            <h2><i class="fas fa-chart-bar"></i> 11. Data Analytics and Big Data</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-chart-line"></i> <a href="azure-synapse-analytics.html" title="Azure Synapse Analytics">Azure Synapse Analytics</a></h3>
+                    <p>An integrated analytics service for big data and data warehousing. Enables advanced data analysis and reporting for .NET applications requiring comprehensive data insights.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-flask"></i> <a href="azure-machine-learning.html" title="Azure Machine Learning">Azure Machine Learning</a></h3>
-            <p><strong>Description:</strong> A cloud-based service for building, training, and deploying machine learning models.</p>
-            <p><strong>Relevance:</strong> Allows .NET architects to integrate custom ML models into applications for advanced analytics and predictions.</p>
-        </div>
-    </div>
+                <article class="service">
+                    <h3><i class="fas fa-cogs"></i> <a href="azure-data-factory.html" title="Azure Data Factory">Azure Data Factory</a></h3>
+                    <p>A cloud-based data integration service. Orchestrates data movement and transformation pipelines for .NET applications handling large datasets.</p>
+                </article>
+            </div>
+        </section>
 
-    <div class="section">
-        <h2><i class="fas fa-server icon-category"></i> 9. Serverless and Event-Driven Architectures</h2>
+        <!-- Hybrid and Multi-Cloud Section -->
+        <section id="hybrid" class="section">
+            <h2><i class="fas fa-network-wired"></i> 12. Hybrid and Multi-Cloud</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-network-wired"></i> <a href="azure-arc.html" title="Azure Arc">Azure Arc</a></h3>
+                    <p>Extends Azure management to any infrastructure. Manages and governs .NET applications across on-premises, multi-cloud, and edge environments consistently.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-stream"></i> <a href="azure-event-hubs.html" title="Azure Event Hubs">Azure Event Hubs</a></h3>
-            <p><strong>Description:</strong> A big data streaming platform and event ingestion service.</p>
-            <p><strong>Relevance:</strong> Manages large-scale event streaming for real-time analytics and processing in .NET applications.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-box-open"></i> <a href="azure-stack.html" title="Azure Stack">Azure Stack</a></h3>
+                    <p>Brings Azure services to on-premises environments. Enables hybrid deployments of .NET applications with consistent Azure services and tooling.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-sync-alt"></i> <a href="azure-durable-functions.html" title="Azure Durable Functions">Azure Durable Functions</a></h3>
-            <p><strong>Description:</strong> An extension of Azure Functions for writing stateful workflows.</p>
-            <p><strong>Relevance:</strong> Enables complex orchestration and long-running processes within serverless .NET applications.</p>
-        </div>
-    </div>
+        <!-- Miscellaneous Services Section -->
+        <section id="misc" class="section">
+            <h2><i class="fas fa-tools"></i> 13. Miscellaneous Services</h2>
+            <div class="services-container">
+                <article class="service">
+                    <h3><i class="fas fa-vial"></i> <a href="azure-devtest-labs.html" title="Azure DevTest Labs">Azure DevTest Labs</a></h3>
+                    <p>Provides environments for testing and development. Facilitates the creation of reproducible environments for developing and testing .NET applications.</p>
+                </article>
 
-    <div class="section">
-        <h2><i class="fas fa-delivery-fast icon-category"></i> 10. Content Delivery and Front-End</h2>
+                <article class="service">
+                    <h3><i class="fas fa-robot"></i> <a href="azure-automation.html" title="Azure Automation">Azure Automation</a></h3>
+                    <p>Automates repetitive tasks and orchestrates complex workflows. Manages infrastructure and application deployments, updates, and maintenance for .NET environments.</p>
+                </article>
 
-        <div class="service">
-            <h3><i class="fas fa-network-wired"></i> <a href="azure-cdn.html" title="Azure Content Delivery Network (CDN)">Azure Content Delivery Network (CDN)</a></h3>
-            <p><strong>Description:</strong> Delivers high-bandwidth content to users globally with low latency.</p>
-            <p><strong>Relevance:</strong> Enhances the performance of .NET web applications by caching static assets closer to users.</p>
-        </div>
+                <article class="service">
+                    <h3><i class="fas fa-service"></i> <a href="azure-service-fabric-mesh.html" title="Azure Service Fabric Mesh">Azure Service Fabric Mesh</a></h3>
+                    <p>Managed service for deploying microservices without managing infrastructure. Simplifies the deployment of microservices-based applications, enabling scalability and reliability.</p>
+                </article>
+            </div>
+        </section>
 
-        <div class="service">
-            <h3><i class="fas fa-door-open"></i> <a href="azure-front-door.html" title="Azure Front Door">Azure Front Door</a></h3>
-            <p><strong>Description:</strong> A scalable and secure entry point for fast delivery of your global applications.</p>
-            <p><strong>Relevance:</strong> Provides features like global load balancing, SSL offloading, and application acceleration for .NET applications.</p>
-        </div>
-    </div>
+        <!-- Best Practices Section -->
+        <section class="section best-practices">
+            <h2><i class="fas fa-lightbulb"></i> Best Practices for .NET Architects in Azure</h2>
+            <ol>
+                <li><strong>Understand Architectural Patterns:</strong> Familiarize yourself with microservices, serverless, and monolithic architectures to choose the best fit for your applications.</li>
+                <li><strong>Embrace DevOps Culture:</strong> Leverage Azure DevOps or GitHub Actions for CI/CD pipelines, ensuring automated testing, deployment, and continuous improvement.</li>
+                <li><strong>Prioritize Security:</strong> Implement security best practices using Azure AD, Key Vault, and Security Center to protect applications and data.</li>
+                <li><strong>Optimize for Scalability and Performance:</strong> Utilize services like Azure App Service, AKS, and CDN to ensure applications can scale efficiently and perform optimally.</li>
+                <li><strong>Monitor and Optimize:</strong> Use Azure Monitor and Application Insights to gain visibility into application performance and proactively address issues.</li>
+                <li><strong>Stay Updated:</strong> Azure services evolve rapidly. Regularly update your knowledge to incorporate new services and features that can enhance your .NET applications.</li>
+            </ol>
+        </section>
 
-    <div class="section">
-        <h2><i class="fas fa-chart-bar icon-category"></i> 11. Data Analytics and Big Data</h2>
+        <!-- Footer Section -->
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Service</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+        </footer>
+    </main>
 
-        <div class="service">
-            <h3><i class="fas fa-chart-line"></i> <a href="azure-synapse-analytics.html" title="Azure Synapse Analytics">Azure Synapse Analytics</a></h3>
-            <p><strong>Description:</strong> An integrated analytics service for big data and data warehousing.</p>
-            <p><strong>Relevance:</strong> Enables advanced data analysis and reporting for .NET applications requiring comprehensive data insights.</p>
-        </div>
+    <!-- JavaScript for Search Functionality -->
+    <script>
+        function searchServices() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const services = document.querySelectorAll('.service');
 
-        <div class="service">
-            <h3><i class="fas fa-cogs"></i> <a href="azure-data-factory.html" title="Azure Data Factory">Azure Data Factory</a></h3>
-            <p><strong>Description:</strong> A cloud-based data integration service.</p>
-            <p><strong>Relevance:</strong> Orchestrates data movement and transformation pipelines for .NET applications handling large datasets.</p>
-        </div>
-    </div>
+            services.forEach(service => {
+                const title = service.querySelector('h3').innerText.toLowerCase();
+                const description = service.querySelector('p').innerText.toLowerCase();
+                if (title.includes(input) || description.includes(input)) {
+                    service.style.display = 'block';
+                } else {
+                    service.style.display = 'none';
+                }
+            });
+        }
 
-    <div class="section">
-        <h2><i class="fas fa-cloud-upload-alt icon-category"></i> 12. Hybrid and Multi-Cloud</h2>
-
-        <div class="service">
-            <h3><i class="fas fa-network-wired"></i> <a href="azure-arc.html" title="Azure Arc">Azure Arc</a></h3>
-            <p><strong>Description:</strong> Extends Azure management to any infrastructure.</p>
-            <p><strong>Relevance:</strong> Manages and governs .NET applications across on-premises, multi-cloud, and edge environments consistently.</p>
-        </div>
-
-        <div class="service">
-            <h3><i class="fas fa-box-open"></i> <a href="azure-stack.html" title="Azure Stack">Azure Stack</a></h3>
-            <p><strong>Description:</strong> Brings Azure services to on-premises environments.</p>
-            <p><strong>Relevance:</strong> Enables hybrid deployments of .NET applications with consistent Azure services and tooling.</p>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2><i class="fas fa-tools icon-category"></i> 13. Miscellaneous Services</h2>
-
-        <div class="service">
-            <h3><i class="fas fa-vial"></i> <a href="azure-devtest-labs.html" title="Azure DevTest Labs">Azure DevTest Labs</a></h3>
-            <p><strong>Description:</strong> Provides environments for testing and development.</p>
-            <p><strong>Relevance:</strong> Facilitates the creation of reproducible environments for developing and testing .NET applications.</p>
-        </div>
-
-        <div class="service">
-            <h3><i class="fas fa-robot"></i> <a href="azure-automation.html" title="Azure Automation">Azure Automation</a></h3>
-            <p><strong>Description:</strong> Automates repetitive tasks and orchestrates complex workflows.</p>
-            <p><strong>Relevance:</strong> Manages infrastructure and application deployments, updates, and maintenance for .NET environments.</p>
-        </div>
-
-        <div class="service">
-            <h3><i class="fas fa-service"></i> <a href="azure-service-fabric-mesh.html" title="Azure Service Fabric Mesh">Azure Service Fabric Mesh</a></h3>
-            <p><strong>Description:</strong> Managed service for deploying microservices without managing infrastructure.</p>
-            <p><strong>Relevance:</strong> Simplifies the deployment of microservices-based applications, enabling scalability and reliability.</p>
-        </div>
-    </div>
-
-    <div class="section best-practices">
-        <h2><i class="fas fa-lightbulb icon-category"></i> Best Practices for .NET Architects in Azure</h2>
-        <ol>
-            <li><strong>Understand Architectural Patterns:</strong> Familiarize yourself with microservices, serverless, and monolithic architectures to choose the best fit for your applications.</li>
-            <li><strong>Embrace DevOps Culture:</strong> Leverage Azure DevOps or GitHub Actions for CI/CD pipelines, ensuring automated testing, deployment, and continuous improvement.</li>
-            <li><strong>Prioritize Security:</strong> Implement security best practices using Azure AD, Key Vault, and Security Center to protect applications and data.</li>
-            <li><strong>Optimize for Scalability and Performance:</strong> Utilize services like Azure App Service, AKS, and CDN to ensure applications can scale efficiently and perform optimally.</li>
-            <li><strong>Monitor and Optimize:</strong> Use Azure Monitor and Application Insights to gain visibility into application performance and proactively address issues.</li>
-            <li><strong>Stay Updated:</strong> Azure services evolve rapidly. Regularly update your knowledge to incorporate new services and features that can enhance your .NET applications.</li>
-        </ol>
-    </div>
-
-    <div class="section">
-        <h2><i class="fas fa-check-circle icon-category"></i> Conclusion</h2>
-        <p>A .NET architect leveraging Azure must have a comprehensive understanding of various Azure services across compute, storage, networking, DevOps, security, and more. Mastery of these services enables the design and implementation of robust, scalable, and secure .NET applications in the cloud. Continuously exploring and staying abreast of Azure's evolving ecosystem will further enhance your capability to architect effective solutions.</p>
-    </div>
+        // Optional: Trigger search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchServices();
+            }
+        });
+    </script>
 </body>
 </html>
