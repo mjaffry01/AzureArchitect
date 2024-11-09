@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partition Pruning Guide</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        h1 { color: #007acc; }
+        h2 { color: #005b99; }
+        h3 { color: #003366; }
+        pre { background-color: #f4f4f4; padding: 10px; border-left: 5px solid #007acc; overflow-x: auto; }
+        code { background-color: #f9f2f4; padding: 2px 4px; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #007acc; color: white; }
+        section { margin-bottom: 40px; }
+        ul { margin-left: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Partition Pruning: A Comprehensive Guide</h1>
+
+<!-- Introduction -->
+<section id="overview">
+    <h2>Introduction to Partition Pruning</h2>
+    <p><b>Partition Pruning</b> is an optimization technique used in databases to enhance query performance when working with <b>partitioned tables</b>. By skipping irrelevant partitions, the database engine reduces the amount of data to be scanned, optimizing query execution.</p>
+</section>
+
+<!-- What is Partition Pruning -->
+<section id="what-is-pruning">
+    <h2>1. What is Partition Pruning?</h2>
+    <p>Partition pruning allows the database engine to skip entire <b>partitions</b> that do not match the query conditions. This results in:</p>
+    <ul>
+        <li>Faster query execution</li>
+        <li>Lower resource usage (CPU, memory, I/O)</li>
+    </ul>
+    <p><a href="#read-more">Read more</a></p>
+
+    <section id="read-more">
+        <h3>Partition vs. Partition Pruning</h3>
+        <p>No, "partition" and "partition pruning" are not the same thing.</p>
+        <ul>
+            <li><b>Partition</b>: In the context of databases, a partition refers to a division of a database table into smaller, more manageable pieces. Each piece is called a partition, and it can be based on a range of values, list of values, or other criteria.</li>
+            <li><b>Partition Pruning</b>: This is an optimization technique used in databases to improve query performance. Partition pruning allows the database engine to skip over partitions that do not need to be scanned based on the query conditions. This reduces the amount of data that needs to be processed, leading to faster query execution and lower resource usage.</li>
+        </ul>
+    </section>
+</section>
+
+<!-- How it Works -->
+<section id="how-it-works">
+    <h2>2. How Partition Pruning Works</h2>
+    <p>Consider a table partitioned by a date column (<code>order_date</code>) into monthly partitions:</p>
+    <pre>
+| Partition | Month     |
+|-----------|-----------|
+| p1        | January   |
+| p2        | February  |
+| p3        | March     |
+    </pre>
+    <p>If you run the query:</p>
+    <pre><code>SELECT * FROM orders WHERE order_date BETWEEN '2024-03-01' AND '2024-03-31';</code></pre>
+    <p>The database engine will only scan the relevant partition (<code>p3</code>), skipping others.</p>
+</section>
+
+<!-- Benefits -->
+<section id="benefits">
+    <h2>3. Benefits of Partition Pruning</h2>
+    <ul>
+        <li>Improves query performance by reducing I/O</li>
+        <li>Optimizes resource utilization</li>
+        <li>Scalability for large datasets in data warehouses</li>
+    </ul>
+</section>
+
+<!-- Types of Partitioning -->
+<section id="types-of-partitioning">
+    <h2>4. Types of Partitioning</h2>
+    <h3>a) Range Partitioning</h3>
+    <pre><code>
+PARTITION BY RANGE (YEAR(order_date)) (
+  PARTITION p2022 VALUES LESS THAN (2023),
+  PARTITION p2023 VALUES LESS THAN (2024)
+);
+    </code></pre>
+    <h3>b) List Partitioning</h3>
+    <pre><code>
+PARTITION BY LIST (region) (
+  PARTITION p_north VALUES IN ('North'),
+  PARTITION p_south VALUES IN ('South')
+);
+    </code></pre>
+    <h3>c) Hash Partitioning</h3>
+    <pre><code>
+PARTITION BY HASH(customer_id) PARTITIONS 4;
+    </code></pre>
+    <h3>d) Composite Partitioning</h3>
+    <p>Combines multiple partitioning strategies (e.g., range + hash).</p>
+</section>
+
+<!-- Indexing in Partitioned Tables -->
+<section id="indexing">
+    <h2>5. Indexing in Partitioned Tables</h2>
+    <h3>Local Indexes</h3>
+    <p>Specific to each partition. Useful for queries filtered by the partition key.</p>
+    <pre><code>CREATE INDEX idx_sale_amount ON sales (amount) LOCAL;</code></pre>
+
+    <h3>Global Indexes</h3>
+    <p>Span across all partitions, ideal for cross-partition queries
+        <p><a href="#cross-partition-queries">Read more</a></p>
+
+        <section id="cross-partition-queries">
+            <h3>Cross-Partition Queries</h3>
+            <p>Cross-partition queries are queries that need to access data across multiple partitions. These queries can be more complex and resource-intensive because they require scanning multiple partitions to retrieve the necessary data.</p>
+            <p>For example, consider a table partitioned by region:</p>
+            <pre><code>
+        PARTITION BY LIST (region) (
+          PARTITION p_north VALUES IN ('North'),
+          PARTITION p_south VALUES IN ('South')
+        );
+            </code></pre>
+            <p>If you run the query:</p>
+            <pre><code>SELECT * FROM sales WHERE region IN ('North', 'South');</code></pre>
+            <p>The database engine will need to scan both partitions (<code>p_north</code> and <code>p_south</code>) to retrieve the results.</p>
+        </section>
+        .</p>
+    <pre><code>CREATE GLOBAL INDEX idx_customer_name ON customers (customer_name);</code></pre>
+
+    <h3>Comparison Table</h3>
+    <table>
+        <tr>
+            <th>Feature</th><th>Local Index</th><th>Global Index</th>
+        </tr>
+        <tr><td>Scope</td><td>Per partition</td><td>Across all partitions</td></tr>
+        <tr><td>Storage</td><td>Separate</td><td>Shared</td></tr>
+        <tr><td>Use Case</td><td>Partition-specific queries</td><td>Cross-partition queries</td></tr>
+    </table>
+</section>
+
+<!-- Use Cases -->
+<section id="use-cases">
+    <h2>6. Use Cases for Partition Pruning</h2>
+    <ul>
+        <li>Data Warehousing: Partition by date for efficient historical data access</li>
+        <li>Multi-Tenant Systems: Partition by tenant ID</li>
+        <li>E-commerce: Partition by product category</li>
+        <li>Log Analysis: Partition by date and region</li>
+    </ul>
+</section>
+
+<!-- Supported Databases -->
+<section id="supported-databases">
+    <h2>7. Supported Databases</h2>
+    <table>
+        <tr><th>Database</th><th>Partitioning</th><th>Pruning Support</th></tr>
+        <tr><td>MySQL</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>PostgreSQL</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>Oracle</td><td>Yes</td><td>Yes</td></tr>
+    </table>
+</section>
+
+<!-- Conclusion -->
+<section id="conclusion">
+    <h2>8. Conclusion</h2>
+    <p>Partition pruning, when combined with efficient indexing strategies, can significantly enhance the performance of large-scale databases. Understanding when to use local vs. global indexes is key to optimizing query performance.</p>
+</section>
+
+</body>
+</html>
