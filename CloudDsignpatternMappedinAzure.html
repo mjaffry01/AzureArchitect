@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud Architectural Patterns in Azure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #0078D7;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        .container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Cloud Architectural Patterns in Azure</h1>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Pattern Name</th>
+                    <th>Description</th>
+                    <th>Azure Implementation</th>
+                    <th>Advantages in Azure</th>
+                    <th>Disadvantages in Azure</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Monolithic Architecture</strong></td>
+                    <td>A single, unified codebase containing all application components.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure App Service:</strong> Host the entire application as a single web app.</li>
+                            <li><strong>Azure Virtual Machines (VMs):</strong> Deploy monolithic apps requiring full OS control.</li>
+                            <li><strong>Azure SQL Database:</strong> Centralized database management.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Simplicity:</strong> Easy to deploy and manage.</li>
+                            <li><strong>Integrated Services:</strong> Leverage Azure’s built-in features.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Scalability Limits:</strong> Must scale the entire application.</li>
+                            <li><strong>Deployment Challenges:</strong> Any change requires redeployment.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><strong>Microservices Architecture</strong></td>
+                    <td>Decomposes an application into smaller, independent services.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Kubernetes Service (AKS):</strong> Orchestrate containerized microservices.</li>
+                            <li><strong>Azure Service Fabric:</strong> Manage scalable microservices.</li>
+                            <li><strong>Azure Functions:</strong> Implement serverless microservices.</li>
+                            <li><strong>Azure API Management:</strong> Expose microservices as APIs.</li>
+                            <li><strong>Azure Cosmos DB:</strong> Scalable, globally distributed databases.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Scalability:</strong> Independently scale services.</li>
+                            <li><strong>Resilience:</strong> Fault isolation.</li>
+                            <li><strong>Flexibility:</strong> Diverse technology stacks.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Complexity:</strong> Increased operational overhead.</li>
+                            <li><strong>Inter-Service Communication:</strong> Requires robust mechanisms.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><strong>Serverless Architecture</strong></td>
+                    <td>Build and run applications without managing servers.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Functions:</strong> Execute event-driven code.</li>
+                            <li><strong>Azure Logic Apps:</strong> Automate workflows.</li>
+                            <li><strong>Azure Event Grid:</strong> Manage and route events.</li>
+                            <li><strong>Azure Durable Functions:</strong> Implement stateful workflows.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Cost-Efficiency:</strong> Pay only for usage.</li>
+                            <li><strong>Automatic Scaling:</strong></li>
+                            <li><strong>Rapid Development:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Cold Starts:</strong> Initial latency after inactivity.</li>
+                            <li><strong>Execution Limits:</strong> Constraints on function runtime.</li>
+                            <li><strong>Debugging and Monitoring:</strong> Can be more challenging.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><strong>Event-Driven Architecture</strong></td>
+                    <td>Components communicate through events for loose coupling and real-time processing.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Event Hubs:</strong> Ingest large-scale data streams.</li>
+                            <li><strong>Azure Event Grid:</strong> Route events to subscribers.</li>
+                            <li><strong>Azure Service Bus:</strong> Reliable message queuing.</li>
+                            <li><strong>Azure Stream Analytics:</strong> Real-time data processing.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Scalability:</strong> Handle high volumes of events.</li>
+                            <li><strong>Decoupling:</strong> Independent component evolution.</li>
+                            <li><strong>Real-Time Processing:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Complexity:</strong> Intricate event flows.</li>
+                            <li><strong>Latency:</strong> Potential delays in processing.</li>
+                            <li><strong>Consistency:</strong> Ensuring data consistency.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><strong>Multi-Tenant Architecture</strong></td>
+                    <td>A single application instance serves multiple customers (tenants).</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure App Service with Deployment Slots:</strong> Isolate environments per tenant.</li>
+                            <li><strong>Azure SQL Database with Elastic Pools:</strong> Manage multiple tenant databases.</li>
+                            <li><strong>Azure Cosmos DB:</strong> Scalable, tenant-specific data stores.</li>
+                            <li><strong>Azure Active Directory (Azure AD):</strong> Manage multi-tenant authentication and authorization.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Resource Efficiency:</strong> Shared infrastructure.</li>
+                            <li><strong>Centralized Management:</strong></li>
+                            <li><strong>Scalability:</strong> Easily onboard new tenants.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Security and Isolation:</strong> Ensuring data isolation.</li>
+                            <li><strong>Customization Limits:</strong></li>
+                            <li><strong>Scaling Complexity:</strong></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><strong>CQRS (Command Query Responsibility Segregation)</strong></td>
+                    <td>Separates read and write operations into distinct models.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Service Bus/Event Hubs:</strong> Messaging between command and query sides.</li>
+                            <li><strong>Azure Functions/App Service:</strong> Handle commands and queries separately.</li>
+                            <li><strong>Azure Cosmos DB:</strong> Scalable read models.</li>
+                            <li><strong>Azure Cognitive Search:</strong> Enhance query capabilities.</li>
+                            <li><strong>Azure Event Grid:</strong> Trigger read model updates.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Optimized Performance:</strong> Separate scaling for reads and writes.</li>
+                            <li><strong>Flexibility:</strong></li>
+                            <li><strong>Maintainability:</strong> Clear separation of concerns.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Increased Complexity:</strong> Managing separate models.</li>
+                            <li><strong>Eventual Consistency:</strong> Handling synchronization delays.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><strong>Data Lake Pattern</strong></td>
+                    <td>Centralized repository for storing all structured and unstructured data.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Data Lake Storage Gen2:</strong> Store vast amounts of raw and processed data.</li>
+                            <li><strong>Azure Synapse Analytics:</strong> Perform big data analytics.</li>
+                            <li><strong>Azure Databricks:</strong> Advanced data processing.</li>
+                            <li><strong>Azure Data Factory:</strong> Orchestrate data pipelines.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Scalability:</strong> Handle petabytes of data.</li>
+                            <li><strong>Flexibility:</strong> Store data in native formats.</li>
+                            <li><strong>Integration:</strong> Seamless with Azure analytics services.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Data Management:</strong> Risk of data swamp.</li>
+                            <li><strong>Security:</strong> Requires meticulous configuration.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td><strong>API Gateway Pattern</strong></td>
+                    <td>A single entry point for all client requests, handling routing, authentication, etc.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure API Management (APIM):</strong> Manage, secure, and monitor APIs.</li>
+                            <li><strong>Azure Front Door:</strong> Global load balancing and SSL termination.</li>
+                            <li><strong>Azure Application Gateway:</strong> Load balancing and WAF.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Centralized Management:</strong></li>
+                            <li><strong>Security:</strong> Robust policies.</li>
+                            <li><strong>Monitoring and Analytics:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Latency:</strong> Added request processing time.</li>
+                            <li><strong>Cost:</strong> Additional costs based on usage.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td><strong>Multi-Cloud Architecture</strong></td>
+                    <td>Deploy applications across multiple cloud providers for resilience and flexibility.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Arc:</strong> Manage resources across multiple clouds.</li>
+                            <li><strong>Azure Site Recovery:</strong> Disaster recovery across clouds.</li>
+                            <li><strong>Azure ExpressRoute and VPN Gateway:</strong> Secure connectivity between Azure and other clouds.</li>
+                            <li><strong>Azure DevOps/GitHub Actions:</strong> CI/CD pipelines across clouds.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Resilience:</strong> Enhanced fault tolerance.</li>
+                            <li><strong>Flexibility:</strong> Best-of-breed services.</li>
+                            <li><strong>Avoid Vendor Lock-In:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Complexity:</strong> Increased deployment and management complexity.</li>
+                            <li><strong>Cost:</strong> Higher costs due to multi-cloud operations.</li>
+                            <li><strong>Security and Compliance:</strong> Ensuring consistency across providers.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td><strong>Hybrid Cloud Architecture</strong></td>
+                    <td>Combines on-premises infrastructure with public/private cloud resources.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Stack:</strong> Deploy Azure services on-premises.</li>
+                            <li><strong>Azure Arc:</strong> Extend Azure management to on-premises.</li>
+                            <li><strong>Azure Site Recovery and Backup:</strong> Business continuity.</li>
+                            <li><strong>Azure ExpressRoute:</strong> Private connections between on-premises and Azure.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Flexibility:</strong> Deploy workloads optimally.</li>
+                            <li><strong>Leverage Existing Investments:</strong></li>
+                            <li><strong>Compliance and Data Residency:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Integration Complexity:</strong></li>
+                            <li><strong>Management Overhead:</strong></li>
+                            <li><strong>Latency:</strong> Data transfer between on-premises and cloud.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td><strong>Edge Computing Pattern</strong></td>
+                    <td>Processes data closer to where it is generated to reduce latency.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure IoT Edge:</strong> Deploy AI and custom logic on IoT devices.</li>
+                            <li><strong>Azure Stack Edge:</strong> Edge computing appliances.</li>
+                            <li><strong>Azure Sphere:</strong> Secure IoT device management.</li>
+                            <li><strong>Azure Cognitive Services on Edge:</strong> Run AI models locally.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Low Latency:</strong> Process data locally.</li>
+                            <li><strong>Bandwidth Optimization:</strong></li>
+                            <li><strong>Resilience:</strong> Maintain functionality offline.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Resource Constraints:</strong> Limited computational power.</li>
+                            <li><strong>Security:</strong> Ensuring distributed device security.</li>
+                            <li><strong>Management Complexity:</strong></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td><strong>Strangler Pattern</strong></td>
+                    <td>Incrementally replaces parts of a legacy system with new services.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure API Management:</strong> Route traffic between legacy and new services.</li>
+                            <li><strong>Azure App Service/AKS:</strong> Host new microservices.</li>
+                            <li><strong>Azure Functions:</strong> Implement new functionalities.</li>
+                            <li><strong>Azure Service Bus:</strong> Facilitate communication between legacy and new systems.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Low-Risk Migration:</strong> Incremental updates reduce risk.</li>
+                            <li><strong>Continuous Operation:</strong> Legacy systems remain operational.</li>
+                            <li><strong>Flexibility:</strong> Choose best Azure services.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Complexity:</strong> Managing legacy and new systems.</li>
+                            <li><strong>Dual Maintenance:</strong></li>
+                            <li><strong>Performance:</strong> Potential latency during transition.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td><strong>Circuit Breaker Pattern</strong></td>
+                    <td>Prevents cascading failures by stopping requests to a failing service.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Application Gateway with WAF:</strong> Health probes and traffic management.</li>
+                            <li><strong>Azure Service Fabric:</strong> Built-in circuit breaker mechanisms.</li>
+                            <li><strong>Azure API Management (APIM):</strong> Apply policies to manage traffic.</li>
+                            <li><strong>Polly Library:</strong> Implement in application code.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Resilience:</strong> Enhances fault tolerance.</li>
+                            <li><strong>Prevent Overload:</strong> Stops excessive requests.</li>
+                            <li><strong>Improved User Experience:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Configuration Complexity:</strong> Requires careful tuning.</li>
+                            <li><strong>Latency:</strong> Additional monitoring logic.</li>
+                            <li><strong>State Management:</strong></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td><strong>Bulkhead Pattern</strong></td>
+                    <td>Isolates resources to prevent failures in one part from affecting others.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Kubernetes Service (AKS) with Namespaces and Resource Quotas:</strong> Isolate different microservices.</li>
+                            <li><strong>Azure Service Fabric:</strong> Deploy services in separate reliability domains.</li>
+                            <li><strong>Azure App Service Plans:</strong> Allocate separate plans for components.</li>
+                            <li><strong>Azure Virtual Machines with Resource Pools:</strong> Dedicated VMs or scalesets for critical components.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Fault Isolation:</strong></li>
+                            <li><strong>Resource Management:</strong></li>
+                            <li><strong>Scalability:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Resource Overhead:</strong> Dedicated resources can lead to underutilization.</li>
+                            <li><strong>Complexity:</strong> Managing resource isolation.</li>
+                            <li><strong>Cost:</strong> Allocating separate resources may increase costs.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td><strong>Shared-Nothing Architecture</strong></td>
+                    <td>Ensures components do not share resources, promoting scalability and isolation.</td>
+                    <td>
+                        <ul>
+                            <li><strong>Azure Cosmos DB with Multi-Account Strategy:</strong> Isolated databases.</li>
+                            <li><strong>Azure Storage Accounts:</strong> Separate storage for different services.</li>
+                            <li><strong>Azure Service Fabric/AKS:</strong> Deploy microservices with their own data stores.</li>
+                            <li><strong>Azure Virtual Networks (VNets):</strong> Isolate network resources.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Scalability:</strong></li>
+                            <li><strong>Fault Isolation:</strong></li>
+                            <li><strong>Performance:</strong></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li><strong>Data Consistency:</strong> Managing data consistency across resources.</li>
+                            <li><strong>Operational Overhead:</strong> Increased number of resources to manage.</li>
+                            <li><strong>Cost:</strong> Multiple isolated resources can increase costs.</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
