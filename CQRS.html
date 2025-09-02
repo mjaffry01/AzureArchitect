@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CQRS Interview Playbook – Architect Level</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  color: #222;
+  line-height: 1.6;
+}
+header {
+  background: #1f4e79;
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem 1rem 1rem;
+}
+.tiles {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin: 4rem auto 3rem auto;
+  flex-wrap: wrap;
+  max-width: 960px;
+}
+
+.tile {
+  background: linear-gradient(135deg, #3178c6, #4ca1ff);
+  box-shadow: 0 8px 20px rgba(49, 120, 198, 0.35);
+  border-radius: 20px;
+  padding: 3.5rem 3rem;
+  min-width: 280px;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #f0f8ff;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.tile:hover {
+  background: linear-gradient(135deg, #4ca1ff, #3178c6);
+  transform: scale(1.1);
+  box-shadow: 0 12px 30px rgba(49, 120, 198, 0.6);
+}
+
+@media (max-width: 600px) {
+  .tiles {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .tile {
+    min-width: auto;
+    width: 90%;
+    font-size: 1.6rem;
+    padding: 3rem 2rem;
+  }
+}
+
+.section {
+  max-width: 980px;
+  margin: 1rem auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  padding: 2rem;
+}
+.hide {
+  display: none;
+}
+.qa {
+  background: white;
+  border-radius: 8px;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  position: relative;
+}
+.question {
+  font-weight: bold;
+  color: #1f4e79;
+  font-size: 1.13rem;
+  margin-bottom: 0.45rem;
+}
+.answer {
+  margin-top: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.listen-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #1f4e79;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+  outline: none;
+}
+.listen-btn:hover {
+  background: #1461b2;
+}
+code {
+  background: #f1f1f1;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  font-size: 90%;
+}
+.btn {
+  background: #1f4e79;
+  color: white;
+  padding: 0.65rem 1.6rem;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+.btn:hover {
+  background: #1562a0;
+}
+.report {
+  background: #fff8ee;
+  color: #a05f1c;
+  border: 1px solid #fae3bf;
+  border-radius: 9px;
+  padding: 1.2rem 2rem;
+}
+@media (max-width:600px) {
+  .tiles { flex-direction: column; gap: 1.5rem;}
+  .tile { min-width: unset;}
+  .section { padding: 1rem;}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>CQRS Interview Playbook</h1>
+  <p>Architect-Level Questions, Study & Quiz</p>
+</header>
+
+<div id="homeTiles" class="tiles">
+  <div class="tile" onclick="showSection('study')">📚 Study CQRS</div>
+  <div class="tile" onclick="showSection('quiz')">🎯 Take Quiz</div>
+  <div class="tile" onclick="showSection('playgate')">🎮 Play Gate</div>
+</div>
+
+<!-- Level Selection for Quiz -->
+<div id="levelSelection" class="tiles hide">
+  <div class="tile" onclick="startQuiz('level1')">Level 1: Foundational Quiz</div>
+  <div class="tile" onclick="startQuiz('level2')">Level 2: Advanced Quiz</div>
+  <div class="tile" onclick="goHome()">⬅️ Back to Home</div>
+</div>
+
+<!-- CQRS Study Section -->
+<div id="studySection" class="section hide">
+  <h2 style="color:#1f4e79;">CQRS Architect Study Guide</h2>
+  <div class="qa">
+    <div class="question">1. What is CQRS and why is it used?</div>
+    <div class="answer" id="answer1">
+      CQRS (Command Query Responsibility Segregation) is an architectural pattern that separates read and write operations into different models.
+      This is used to optimize performance, scalability, and security by allowing independent tuning of query and command sides.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer1')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">2. How is CQRS different from CRUD?</div>
+    <div class="answer" id="answer2">
+      CRUD uses a single model for both reads and writes, often leading to compromises. CQRS separates them, allowing denormalized views for reads
+      and normalized transactional models for writes, avoiding conflicts in optimization.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer2')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">3. Do you always need Event Sourcing with CQRS?</div>
+    <div class="answer" id="answer3">
+      No. Event Sourcing stores every change as an event, which can rebuild state. While it complements CQRS, CQRS can be implemented
+      without Event Sourcing, using traditional databases for writes and read replicas for queries.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer3')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">4. What are the trade-offs of implementing CQRS?</div>
+    <div class="answer" id="answer4">
+      <strong>Pros:</strong> Scalability, flexibility, optimized reads, better security separation.<br>
+      <strong>Cons:</strong> Increased complexity, eventual consistency, infrastructure overhead, higher skill requirements.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer4')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">5. How do you handle eventual consistency in CQRS?</div>
+    <div class="answer" id="answer5">
+      By using asynchronous messaging between the write and read sides, designing idempotent consumers,
+      using compensating actions, and setting user expectations for possible delays in read models.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer5')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">6. How would you implement CQRS in .NET?</div>
+    <div class="answer" id="answer6">
+      Use <code>MediatR</code> for command/query handlers, a relational DB (e.g., SQL Server) for writes,
+      and a denormalized store (e.g., ElasticSearch, Redis) for reads. Coordinate updates via an event bus
+      (Azure Service Bus, Kafka, RabbitMQ).
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer6')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">7. When is CQRS not a good fit?</div>
+    <div class="answer" id="answer7">
+      For small-scale applications with low complexity and low concurrency needs, where the cost of complexity outweighs the benefits.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer7')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">8. How do you test a CQRS-based system?</div>
+    <div class="answer" id="answer8">
+      Unit test commands for business rules and side effects. Unit test queries for correct data retrieval. Integration test event flows between write and read models. Use contract tests for message formats.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer8')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">9. How do you migrate from CRUD to CQRS incrementally?</div>
+    <div class="answer" id="answer9">
+      Start by introducing separate read models for performance-critical queries, keeping writes in the existing model.
+      Gradually split commands into dedicated handlers, and add messaging to sync read models.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer9')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">10. Can CQRS be combined with Microservices?</div>
+    <div class="answer" id="answer10">
+      Yes. Each microservice can implement CQRS internally, with its own read/write separation,
+      communicating asynchronously through events to maintain system-wide consistency.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer10')">🔊 Listen</button>
+  </div>
+  <div class="qa">
+    <div class="question">11. Can CQRS be used with SQL or NoSQL databases?</div>
+    <div class="answer" id="answer11">
+      Yes. CQRS can be implemented with both SQL and NoSQL databases. The write side often uses a relational database (e.g., SQL Server, PostgreSQL) for strong <strong>transactional consistency</strong>, ensuring that each command executes atomically and maintains data integrity across related changes.
+      <br><br>
+      While most NoSQL databases prioritize scalability and performance over strict ACID compliance, some modern NoSQL solutions (e.g., MongoDB with multi-document transactions, Cosmos DB with transactional batch operations) do offer transactional consistency within certain scopes. However, achieving the same level of cross-entity, cross-collection transactional guarantees as in SQL may be more complex or limited in NoSQL.
+      <br><br>
+      The read side in CQRS can often use a NoSQL store (e.g., MongoDB, Elasticsearch, Redis) for denormalized, high-performance queries, where consistency can be eventual. In some cases, both sides may use the same type of database but with different schemas optimized for their specific operations.
+    </div>
+    <button class="listen-btn" onclick="speakAnswer('answer11')">🔊 Listen</button>
+  </div>
+  <button class="btn" onclick="goHome()">⬅️ Home</button>
+</div>
+
+<!-- Play Gate Section -->
+<div id="playgateSection" class="section hide">
+  <h2 style="color:#1f4e79;">🎯 Assessment Tools</h2>
+  <div class="tiles">
+    <div class="tile" onclick="showAssessmentTool('skillsMatrix')">📊 Skills Matrix</div>
+    <div class="tile" onclick="showAssessmentTool('interviewSim')">🤖 Interview Simulator</div>
+    <div class="tile" onclick="showAssessmentTool('caseStudy')">📋 Case Study Builder</div>
+  </div>
+  <button class="btn" onclick="goHome()">⬅️ Home</button>
+</div>
+
+<!-- Skills Matrix Section -->
+<div id="skillsMatrixSection" class="section hide">
+  <h2 style="color:#1f4e79;">📊 CQRS Skills Assessment Matrix</h2>
+  <p>Rate your knowledge level in each area (1-5 scale) to get personalized learning recommendations.</p>
+  
+  <div id="skillsForm">
+    <div class="qa">
+      <div class="question">1. Basic CQRS Concepts & Terminology</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill1" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill1" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill1" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill1" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill1" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+    
+    <div class="qa">
+      <div class="question">2. Event Sourcing Integration</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill2" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill2" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill2" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill2" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill2" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+    
+    <div class="qa">
+      <div class="question">3. Consistency Patterns & Trade-offs</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill3" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill3" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill3" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill3" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill3" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+    
+    <div class="qa">
+      <div class="question">4. Implementation Technologies (.NET, messaging, databases)</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill4" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill4" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill4" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill4" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill4" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+    
+    <div class="qa">
+      <div class="question">5. Testing Strategies for CQRS Systems</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill5" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill5" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill5" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill5" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill5" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+    
+    <div class="qa">
+      <div class="question">6. Microservices & Distributed Systems with CQRS</div>
+      <div class="skill-rating">
+        <label><input type="radio" name="skill6" value="1"> 1 - Beginner</label>
+        <label><input type="radio" name="skill6" value="2"> 2 - Novice</label>
+        <label><input type="radio" name="skill6" value="3"> 3 - Intermediate</label>
+        <label><input type="radio" name="skill6" value="4"> 4 - Advanced</label>
+        <label><input type="radio" name="skill6" value="5"> 5 - Expert</label>
+      </div>
+    </div>
+  </div>
+  
+  <button class="btn" onclick="generateLearningPath()">Get My Learning Path</button>
+  <button class="btn" onclick="goBackToPlayGate()">⬅️ Back to Assessment Tools</button>
+  
+  <div id="learningPathResult" class="report hide" style="margin-top: 2rem;"></div>
+</div>
+
+<!-- Interview Simulator Section -->
+<div id="interviewSimSection" class="section hide">
+  <h2 style="color:#1f4e79;">🤖 CQRS Interview Simulator</h2>
+  <p>Practice with AI-powered mock interviews. Get realistic follow-up questions based on your answers.</p>
+  
+  <div id="interviewChat" class="qa" style="max-height: 400px; overflow-y: auto; background: #f8f9fa;">
+    <div id="chatMessages"></div>
+  </div>
+  
+  <div class="qa">
+    <div class="question">Your Response:</div>
+    <textarea id="interviewResponse" rows="4" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+    <br>
+    <button class="btn" onclick="submitInterviewResponse()" style="margin-top: 0.5rem;">Submit Answer</button>
+    <button class="btn" onclick="startNewInterview()" style="background: #28a745;">Start New Interview</button>
+  </div>
+  
+  <button class="btn" onclick="goBackToPlayGate()">⬅️ Back to Assessment Tools</button>
+</div>
+
+<!-- Case Study Builder Section -->
+<div id="caseStudySection" class="section hide">
+  <h2 style="color:#1f4e79;">📋 Case Study Builder</h2>
+  <p>Create and explore real-world CQRS implementation scenarios.</p>
+  
+  <div class="qa">
+    <div class="question">Select a Business Domain:</div>
+    <select id="domainSelect" style="width: 100%; padding: 0.5rem; margin-bottom: 1rem;">
+      <option value="">Choose a domain...</option>
+      <option value="ecommerce">E-commerce Platform</option>
+      <option value="banking">Banking System</option>
+      <option value="healthcare">Healthcare Management</option>
+      <option value="logistics">Supply Chain & Logistics</option>
+      <option value="social">Social Media Platform</option>
+      <option value="iot">IoT Data Processing</option>
+    </select>
+  </div>
+  
+  <div class="qa">
+    <div class="question">System Scale:</div>
+    <div>
+      <label><input type="radio" name="scale" value="small"> Small (< 1K users)</label><br>
+      <label><input type="radio" name="scale" value="medium"> Medium (1K - 100K users)</label><br>
+      <label><input type="radio" name="scale" value="large"> Large (100K+ users)</label>
+    </div>
+  </div>
+  
+  <div class="qa">
+    <div class="question">Primary Requirements:</div>
+    <div>
+      <label><input type="checkbox" name="req" value="performance"> High Performance</label><br>
+      <label><input type="checkbox" name="req" value="analytics"> Complex Analytics</label><br>
+      <label><input type="checkbox" name="req" value="audit"> Audit Trail</label><br>
+      <label><input type="checkbox" name="req" value="scalability"> Horizontal Scalability</label><br>
+      <label><input type="checkbox" name="req" value="realtime"> Real-time Updates</label>
+    </div>
+  </div>
+  
+  <button class="btn" onclick="generateCaseStudy()">Generate Case Study</button>
+  <button class="btn" onclick="goBackToPlayGate()">⬅️ Back to Assessment Tools</button>
+  
+  <div id="caseStudyResult" class="report hide" style="margin-top: 2rem;"></div>
+</div>
+
+<!-- MCQ QUIZ SECTION -->
+<div id="quizSection" class="section hide">
+  <h2 style="color:#1f4e79;">CQRS Quiz Selection</h2>
+  <div id="levelSelection2" class="tiles">
+    <div class="tile" onclick="startQuiz('level1')">Level 1: Foundational Quiz</div>
+    <div class="tile" onclick="startQuiz('level2')">Level 2: Advanced Quiz</div>
+  </div>
+  <button class="btn" onclick="goHome()">⬅️ Home</button>
+</div>
+
+<!-- ACTUAL QUIZ SECTION -->
+<div id="actualQuizSection" class="section hide">
+  <h2 style="color:#1f4e79;" id="quizTitle">CQRS Quiz</h2>
+  <form id="quizForm"></form>
+  <button class="btn" id="submitBtn" onclick="submitQuiz()">Submit Quiz</button>
+  <button class="btn" onclick="goHome()">⬅️ Home</button>
+</div>
+
+<!-- REPORT SECTION -->
+<div id="reportSection" class="section hide">
+  <h2 style="color:#1f4e79;">Your Quiz Report & Restudy Suggestions</h2>
+  <div id="quizReport" class="report"></div>
+  <button class="btn" onclick="goHome()">⬅️ Home</button>
+</div>
+
+<footer style="text-align: center; padding: 2rem; color: #666;">
+© 2025 CQRS Interview Playbook – Architect Edition
+</footer>
+
+<script>
+// Global variables
+let currentMcqs = [];
+let currentLevel = '';
+
+function showSection(section) {
+  // Hide all sections
+  document.getElementById('homeTiles').classList.add('hide');
+  document.getElementById('studySection').classList.add('hide');
+  document.getElementById('playgateSection').classList.add('hide');
+  document.getElementById('quizSection').classList.add('hide');
+  document.getElementById('actualQuizSection').classList.add('hide');
+  document.getElementById('reportSection').classList.add('hide');
+  
+  // Show the requested section
+  if (section === 'study') document.getElementById('studySection').classList.remove('hide');
+  if (section === 'playgate') document.getElementById('playgateSection').classList.remove('hide');
+  if (section === 'quiz') document.getElementById('quizSection').classList.remove('hide');
+  if (section === 'actualQuiz') document.getElementById('actualQuizSection').classList.remove('hide');
+  if (section === 'report') document.getElementById('reportSection').classList.remove('hide');
+}
+
+function goHome() {
+  document.getElementById('homeTiles').classList.remove('hide');
+  document.getElementById('studySection').classList.add('hide');
+  document.getElementById('playgateSection').classList.add('hide');
+  document.getElementById('quizSection').classList.add('hide');
+  document.getElementById('actualQuizSection').classList.add('hide');
+  document.getElementById('reportSection').classList.add('hide');
+}
+
+function speakAnswer(answerId) {
+  const answerElement = document.getElementById(answerId);
+  if (!answerElement) return;
+  let text = answerElement.innerText || answerElement.textContent;
+  if (answerElement.tagName.toLowerCase() === 'div') {
+    const lis = answerElement.querySelectorAll('li');
+    if (lis.length) text += " " + Array.from(lis).map(li => li.innerText).join(" ");
+  }
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  speechSynthesis.speak(utterance);
+}
+
+// MCQs DATA
+const mcqsLevel1 = [
+  { question: "What does CQRS stand for?", options: ["Command Query Responsibility Segregation", "Create Query Read System", "Complex Query Response Service", "Command Queue Resource Service"], answer: 0, concept: "Basic terminology" },
+  { question: "Which pattern typically complements CQRS for event tracking?", options: ["Factory", "Singleton", "Event Sourcing", "Decorator"], answer: 2, concept: "Event Sourcing" },
+  { question: "In CQRS, which model handles data writes?", options: ["Read Model", "Command Model", "Cache", "Query Handler"], answer: 1, concept: "Write model" },
+  { question: "What type of database is commonly used for the write side in CQRS?", options: ["Relational SQL", "Denormalized NoSQL", "Flat File", "Time Series DB"], answer: 0, concept: "Write side database" },
+  { question: "CQRS read models are generally designed to be:", options: ["Normalized", "Encrypted", "Denormalized", "Transactional"], answer: 2, concept: "Read optimization" },
+  { question: "What is the main complexity introduced by CQRS?", options: ["Synchronous calls", "Eventual consistency", "Monolithic codebase", "Data duplication"], answer: 1, concept: "Complexity trade-offs" },
+  { question: "How does CQRS improve scalability?", options: ["By separating read and write models", "By using a single database", "Through synchronous processing", "By eliminating caching"], answer: 0, concept: "Scaling" },
+  { question: "What is eventual consistency in CQRS?", options: ["Data is always synced immediately", "Temporary inconsistency with guaranteed sync later", "Data conflict", "No synchronization"], answer: 1, concept: "Consistency" },
+  { question: "Why separate read and write models in CQRS?", options: ["For security only", "To optimize each independently", "To simplify code only", "To reduce network traffic"], answer: 1, concept: "Separation reason" },
+  { question: "Which component handles business logic in CQRS?", options: ["Query handlers", "Command handlers", "Read databases", "Cache"], answer: 1, concept: "Business logic" },
+  { question: "Which is a benefit of denormalized read models?", options: ["Faster query response", "Better transactional integrity", "Simpler updates", "Less storage use"], answer: 0, concept: "Read model design" },
+  { question: "In CQRS, command validation is usually done:", options: ["Before persisting data", "After returning query results", "In UI only", "Not necessary"], answer: 0, concept: "Validation" },
+  { question: "What does a command handler NOT do?", options: ["Modify state", "Return query data", "Process business rules", "Validate command"], answer: 1, concept: "Command handler" },
+  { question: "CQRS commands are:", options: ["Operations that change system state", "Read-only queries", "Responses to events", "UI updates"], answer: 0, concept: "Commands" },
+  { question: "When is CQRS not a good fit?", options: ["Large enterprise systems", "High-concurrency applications", "Small, simple applications", "Distributed systems"], answer: 2, concept: "CQRS applicability" }
+];
+
+const mcqsLevel2 = [
+  { question: "Which messaging systems can be used to synchronize read and write models in CQRS?", options: ["RabbitMQ", "Kafka", "Azure Service Bus", "All of the above"], answer: 3, concept: "Messaging" },
+  { question: "How can CQRS facilitate microservices?", options: ["Enables independent scaling of services", "Enforces monolithic architecture", "Requires centralized DB", "Disables event messaging"], answer: 0, concept: "Microservices" },
+  { question: "A challenge of using CQRS with separate databases is:", options: ["Ensuring synchronization", "Writing SQL", "Scaling reads", "Deploying event handlers"], answer: 0, concept: "Synchronization" },
+  { question: "Which is common in CQRS for handling complex business rules?", options: ["Aggregates", "Singletons", "Active records", "Data mappers"], answer: 0, concept: "Domain design" },
+  { question: "What is a key consideration when implementing eventual consistency?", options: ["Compensating actions", "Immediate consistency", "Reducing messaging", "Eliminating caching"], answer: 0, concept: "Consistency handling" },
+  { question: "In CQRS, read and write data stores:", options: ["Can use different technologies", "Must be identical", "Cannot be NoSQL", "Are always relational"], answer: 0, concept: "Data stores" },
+  { question: "CQRS enables better security by:", options: ["Isolating command and query access", "Encrypting all data", "Preventing read access", "Disabling updates"], answer: 0, concept: "Security" },
+  { question: "What is an aggregate in CQRS and DDD?", options: ["Cluster of domain objects treated as a unit", "Database schema", "Query result set", "UI component"], answer: 0, concept: "DDD concept" },
+  { question: "Which .NET library is popular for CQRS pattern implementations?", options: ["MediatR", "Entity Framework", "AutoMapper", "SignalR"], answer: 0, concept: "Implementation" },
+  { question: "If multiple users update the same aggregate concurrently, CQRS helps by:", options: ["Implementing optimistic concurrency", "Performing immediate synchronization", "Allowing conflicting writes", "Disabling updates"], answer: 0, concept: "Concurrency" },
+  { question: "Which testing types are essential for CQRS?", options: ["Unit, Integration, Contract tests", "UI tests only", "Smoke tests", "Performance tests only"], answer: 0, concept: "Testing" },
+  { question: "In Event Sourcing with CQRS, what is a snapshot?", options: ["A backup of the database", "A point-in-time state reconstruction", "A query result cache", "An error log"], answer: 1, concept: "Event Sourcing snapshots" },
+  { question: "How do you handle command failures in CQRS?", options: ["Retry indefinitely", "Use saga patterns for compensation", "Ignore failures", "Rollback read models"], answer: 1, concept: "Error handling" },
+  { question: "What is the role of projections in CQRS?", options: ["Handle commands", "Transform events to read models", "Validate input", "Store raw data"], answer: 1, concept: "Projections" },
+  { question: "In CQRS, how do you ensure data consistency across read models?", options: ["Synchronous updates", "Event ordering and idempotency", "Manual synchronization", "Database triggers"], answer: 1, concept: "Read model consistency" }
+];
+
+function startQuiz(level) {
+  currentLevel = level;
+  if (level === 'level1') {
+    currentMcqs = mcqsLevel1;
+    document.getElementById('quizTitle').textContent = 'CQRS Foundational Quiz (15 Questions)';
+  } else {
+    currentMcqs = mcqsLevel2;
+    document.getElementById('quizTitle').textContent = 'CQRS Advanced Quiz (15 Questions)';
+  }
+  showSection('actualQuiz');
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const quizForm = document.getElementById('quizForm');
+  quizForm.innerHTML = '';
+  currentMcqs.forEach((mcq, idx) => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'qa';
+    qDiv.innerHTML = `<div class="question">Q${idx+1}. ${mcq.question}</div>`;
+    mcq.options.forEach((opt, n) => {
+      const optId = `q${idx}_opt${n}`;
+      qDiv.innerHTML += `<label style="display:block; margin-bottom:.5rem;">
+        <input type="radio" name="q${idx}" id="${optId}" value="${n}"> ${opt}
+      </label>`;
+    });
+    quizForm.appendChild(qDiv);
+  });
+  document.getElementById('submitBtn').disabled = false;
+}
+
+function submitQuiz() {
+  let score = 0;
+  let wrongs = [];
+  currentMcqs.forEach((mcq, idx) => {
+    let selected = document.querySelector(`input[name="q${idx}"]:checked`);
+    if (selected && Number(selected.value) === mcq.answer) { 
+      score++; 
+    } else { 
+      wrongs.push({ idx, question: mcq.question, concept: mcq.concept }); 
+    }
+  });
+  
+  showSection('report');
+  let percentage = Math.round((score / currentMcqs.length) * 100);
+  let reportMsg = `<strong>Your score:</strong> <span style="color:#1f4e79">${score} / ${currentMcqs.length} (${percentage}%)</span><br>`;
+  
+  if (wrongs.length === 0) {
+    reportMsg += "<br>🎉 Excellent! You answered all correctly. No restudy needed.";
+  } else {
+    reportMsg += `<br><strong>Concepts to Restudy:</strong><ul>`;
+    wrongs.forEach(w => {
+      reportMsg += `<li><em>${w.concept}:</em> ${w.question}</li>`;
+    });
+    reportMsg += "</ul>";
+    
+    if (percentage >= 80) {
+      reportMsg += "<br><strong>Great job!</strong> You're well prepared for CQRS architect interviews.";
+    } else if (percentage >= 60) {
+      reportMsg += "<br><strong>Good effort!</strong> Review the concepts above and try again.";
+    } else {
+      reportMsg += "<br><strong>Keep studying!</strong> Review the study guide and focus on the concepts listed above.";
+    }
+  }
+  document.getElementById('quizReport').innerHTML = reportMsg;
+}
+</script>
+</body>
+</html>
