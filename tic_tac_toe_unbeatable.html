@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unbeatable Tic‑Tac‑Toe</title>
+  <style>
+    :root { 
+      --size: min(92vmin, 560px);
+      --grid: #94a3b8;             /* grid line color (slate-400) */
+      --line: clamp(3px, 1.2vmin, 6px); /* grid line thickness responsive */
+      --cellBg: #0b1220;           /* cell background */
+    }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, Arial, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; background: #0f172a; color: #e2e8f0; }
+    .wrap { width: var(--size); max-width: 96vw; display: grid; gap: 12px; }
+    h1 { margin: 0; font-size: clamp(20px, 4vw, 28px); letter-spacing: .3px; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    select, button { border: 0; padding: 10px 12px; border-radius: 12px; background: #1f2937; color: #e5e7eb; font-weight: 600; cursor: pointer; }
+    button:hover, select:hover { filter: brightness(1.12); }
+
+    /* BOARD with **high‑contrast grid** */
+    .board { 
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; 
+      background: #111827; padding: 12px; border-radius: 16px; 
+      box-shadow: 0 10px 35px rgba(0,0,0,.35);
+    }
+    .cell { 
+      aspect-ratio: 1/1; display: grid; place-items: center; 
+      font-size: clamp(34px, 10vw, 72px); font-weight: 800; 
+      background: var(--cellBg); color: #e5e7eb; 
+      user-select: none; transition: transform .08s ease, outline-color .12s ease; 
+      border-right: var(--line) solid var(--grid);
+      border-bottom: var(--line) solid var(--grid);
+    }
+    /* hide the outermost borders so the grid lines are thick and clean */
+    .cell:nth-child(3n) { border-right: 0; }
+    .cell:nth-last-child(-n+3) { border-bottom: 0; }
+
+    .cell:active { transform: scale(.98); }
+    .cell:not([disabled]):hover { outline: 3px solid rgba(148,163,184,.45); }
+    .cell[disabled] { opacity: .45; cursor: not-allowed; }
+
+    .win { background: #0a1a38; color: #34d399; outline: 3px solid #34d399; }
+
+    .status { min-height: 1.5em; font-weight: 700; letter-spacing: .2px; }
+    .small { opacity: .8; font-size: .9em; }
+    .footer { opacity: .7; font-size: .85em; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Unbeatable Tic‑Tac‑Toe</h1>
+
+    <div class="controls">
+      <label>
+        You play as
+        <select id="humanSelect">
+          <option value="X">X</option>
+          <option value="O">O</option>
+        </select>
+      </label>
+      <label>
+        First move by
+        <select id="firstSelect">
+          <option value="HUMAN">Human</option>
+          <option value="AI">AI</option>
+        </select>
+      </label>
+      <button id="resetBtn">New Game</button>
+      <span class="small">(AI is perfect — you can’t beat it.)</span>
+    </div>
+
+    <div id="status" class="status">Your turn.</div>
+    <div id="board" class="board" aria-label="Tic-Tac-Toe board"></div>
+
+    <div class="footer">Tip: Try to beat it by starting in a corner 😉</div>
+  </div>
+
+  <script>
+    const boardEl = document.getElementById('board');
+    const statusEl = document.getElementById('status');
+    const humanSel = document.getElementById('humanSelect');
+    const firstSel = document.getElementById('firstSelect');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let board, human, ai, current, winningLine;
+
+    const LINES = [
+      [0,1,2],[3,4,5],[6,7,8], // rows
+      [0,3,6],[1,4,7],[2,5,8], // columns
+      [0,4,8],[2,4,6]          // diagonals
+    ];
+
+    function init() {
+      board = Array(9).fill(null);
+      winningLine = null;
+      human = humanSel.value;         // 'X' or 'O'
+      ai = human === 'X' ? 'O' : 'X';
+      current = firstSel.value === 'AI' ? ai : human;
+      renderBoard();
+      updateStatus();
+      if (current === ai) setTimeout(aiMove, 200);
+    }
+
+    function renderBoard() {
+      boardEl.innerHTML = '';
+      for (let i = 0; i < 9; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'cell';
+        btn.dataset.idx = i;
+        btn.textContent = board[i] || '';
+        btn.disabled = !!board[i] || isTerminal(board);
+        if (winningLine && winningLine.includes(i)) btn.classList.add('win');
+        btn.addEventListener('click', onHumanMove);
+        boardEl.appendChild(btn);
+      }
+    }
+
+    function onHumanMove(e) {
+      const i = +e.currentTarget.dataset.idx;
+      if (current !== human || board[i] || isTerminal(board)) return;
+      moveAt(i, human);
+      const end = isTerminal(board);
+      if (end) { finish(end); return; }
+      current = ai;
+      setTimeout(aiMove, 120);
+    }
+
+    function aiMove() {
+      const move = bestMove(board, ai, human);
+      if (move !== null) moveAt(move, ai);
+      const end = isTerminal(board);
+      if (end) { finish(end); return; }
+      current = human;
+      updateStatus();
+    }
+
+    function moveAt(i, mark) {
+      board[i] = mark;
+      renderBoard();
+      updateStatus();
+    }
+
+    function finish(end) {
+      if (end.winner && end.winner !== 'draw') {
+        winningLine = end.line;
+      }
+      renderBoard();
+      updateStatus(end);
+    }
+
+    function updateStatus(end = isTerminal(board)) {
+      if (!end) {
+        statusEl.textContent = current === human ? 'Your turn.' : 'AI is thinking…';
+      } else if (end.winner === 'draw') {
+        statusEl.textContent = "It's a draw (as expected!).";
+      } else {
+        statusEl.textContent = end.winner === human ? 'You win! (Whoa!)' : 'AI wins.';
+      }
+    }
+
+    function getWinningLine(b) {
+      for (const line of LINES) {
+        const [a, c, d] = line;
+        if (b[a] && b[a] === b[c] && b[a] === b[d]) return line;
+      }
+      return null;
+    }
+
+    function isTerminal(b) {
+      const line = getWinningLine(b);
+      if (line) return { winner: b[line[0]], line };
+      if (b.every(x => x)) return { winner: 'draw' };
+      return null;
+    }
+
+    function bestMove(b, ai, human) {
+      let bestScore = -Infinity;
+      let move = null;
+      for (let i = 0; i < 9; i++) {
+        if (!b[i]) {
+          b[i] = ai;
+          const score = minimax(b, 0, false, ai, human, -Infinity, +Infinity);
+          b[i] = null;
+          if (score > bestScore) { bestScore = score; move = i; }
+        }
+      }
+      return move;
+    }
+
+    // Minimax with alpha–beta pruning (AI never loses)
+    function minimax(b, depth, isMax, ai, human, alpha, beta) {
+      const end = isTerminal(b);
+      if (end) {
+        if (end.winner === ai) return 10 - depth;    // faster wins are better
+        if (end.winner === human) return depth - 10;  // delay losses
+        return 0; // draw
+      }
+
+      if (isMax) {
+        let best = -Infinity;
+        for (let i = 0; i < 9; i++) if (!b[i]) {
+          b[i] = ai;
+          best = Math.max(best, minimax(b, depth + 1, false, ai, human, alpha, beta));
+          b[i] = null;
+          alpha = Math.max(alpha, best);
+          if (beta <= alpha) break; // prune
+        }
+        return best;
+      } else {
+        let best = +Infinity;
+        for (let i = 0; i < 9; i++) if (!b[i]) {
+          b[i] = human;
+          best = Math.min(best, minimax(b, depth + 1, true, ai, human, alpha, beta));
+          b[i] = null;
+          beta = Math.min(beta, best);
+          if (beta <= alpha) break; // prune
+        }
+        return best;
+      }
+    }
+
+    resetBtn.addEventListener('click', init);
+    humanSel.addEventListener('change', init);
+    firstSel.addEventListener('change', init);
+    init();
+  </script>
+</body>
+</html>
