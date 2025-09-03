@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SOLID Principles — Step‑by‑Step (C#) — Beginner Friendly</title>
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #161a2b;
+      --ink: #e7e9f7;
+      --muted: #b7bdd6;
+      --accent: #7c9fff;
+      --accent-2: #23d5ab;
+      --danger: #ff7a90;
+      --mono-bg: #0b0e1a;
+      --mono-border: #2a3150;
+      --code-ink: #d9e1ff;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% -10%, #1b1f39, #0c0f1d 55%) fixed;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .container { max-width: 1050px; margin: 0 auto; padding: 28px 16px 64px; }
+    header { position: sticky; top: 0; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(15,18,32,.85), rgba(15,18,32,.35), transparent); padding: 10px 0 6px; z-index: 5; }
+    .title { font-size: 28px; font-weight: 800; letter-spacing: .2px; }
+    .subtitle { color: var(--muted); margin-top: 6px; }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    button, .chip {
+      background: var(--panel); color: var(--ink); border: 1px solid #303859; border-radius: 12px; padding: 8px 12px; cursor: pointer; font-weight: 600; font-size: 14px;
+      box-shadow: 0 6px 18px rgba(20, 25, 55, .35) inset, 0 1px 0 rgba(255,255,255,.06);
+    }
+    button:hover { border-color: var(--accent); color: var(--accent); }
+    .toc { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 10px; }
+    .toc a { text-decoration: none; color: var(--muted); background: linear-gradient(180deg, #171b2f, #13172a); border: 1px solid #2b3354; border-radius: 12px; padding: 10px 12px; display: block; font-weight: 600; }
+    .toc a:hover { border-color: var(--accent); color: var(--ink); }
+    section.card { margin-top: 26px; border: 1px solid #2b3354; border-radius: 16px; background: linear-gradient(180deg, #13172a, #101326 55%, #0f1220); box-shadow: 0 30px 80px rgba(10, 12, 25, .45);
+      overflow: hidden; }
+    .card h2 { margin: 0; padding: 18px 18px 4px; font-size: 22px; }
+    .badge { display: inline-block; font-size: 12px; color: #0a1022; background: linear-gradient(90deg, var(--accent), var(--accent-2)); padding: 3px 8px; border-radius: 999px; margin-left: 8px; font-weight: 800; letter-spacing: .3px; }
+    .card .def { color: var(--muted); padding: 0 18px 14px; }
+    details.step { border-top: 1px solid #2b3354; background: linear-gradient(180deg, #0f1220, #0e1120); }
+    details.step[open] { background: linear-gradient(180deg, #0f1220, #0f1228); }
+    summary { list-style: none; padding: 14px 18px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    summary .tag { font-size: 12px; font-weight: 800; color: var(--muted); border: 1px solid #2a3150; padding: 4px 8px; border-radius: 999px; }
+    summary:hover { color: var(--accent); }
+
+    .codewrap { position: relative; }
+    pre { margin: 0; overflow:auto; background: var(--mono-bg); border-top: 1px solid var(--mono-border); border-bottom: 1px solid var(--mono-border); }
+    pre code { display: block; padding: 16px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; color: var(--code-ink); font-size: 13px; line-height: 1.5; }
+    .codebar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; font-size: 12px; color: var(--muted); border-top: 1px solid #242a44; background: #0c0f1d; }
+    .copybtn { position: absolute; top: 10px; right: 10px; background: #141a2f; border: 1px solid #2e3760; color: var(--muted); font-size: 12px; padding: 6px 8px; border-radius: 10px; cursor: pointer; }
+    .copybtn:hover { color: var(--accent); border-color: var(--accent); }
+    .hint { padding: 12px 18px; color: var(--muted); border-left: 3px solid var(--accent); background: rgba(124,159,255,.07); }
+    .bullets { padding: 10px 22px 18px; color: var(--muted); }
+    .bullets li { margin: 6px 0; }
+    .footer { margin-top: 40px; color: var(--muted); font-size: 13px; text-align: center; }
+    .danger { color: var(--danger); }
+    .good { color: var(--accent-2); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="title">SOLID Principles — Step‑by‑Step (C#)</div>
+      <div class="subtitle">Teach beginners using tiny refactors. Start from a messy version, then improve it in small steps. Let them guess the refactor before you reveal it.</div>
+      <div class="toolbar">
+        <button id="expandAll">Expand all</button>
+        <button id="collapseAll">Collapse all</button>
+        <span class="chip">Tip: run each <b>Step</b> in a fresh Console project.</span>
+      </div>
+      <nav class="toc" aria-label="Table of contents">
+        <a href="#srp">SRP — Single Responsibility</a>
+        <a href="#ocp">OCP — Open/Closed</a>
+        <a href="#lsp">LSP — Liskov Substitution</a>
+        <a href="#isp">ISP — Interface Segregation</a>
+        <a href="#dip">DIP — Dependency Inversion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="srp" class="card">
+      <h2>SRP — Single Responsibility <span class="badge">One class, one job</span></h2>
+      <p class="def">A class should have <b>one reason to change</b>.</p>
+
+      <details class="step">
+        <summary><span class="tag">Step 0</span> Anti‑example — one class does everything <span class="danger">(don’t do this)</span></summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#srp0">Copy</button>
+          <pre><code id="srp0">using System;
+using System.Collections.Generic;
+
+class InvoiceItem { public string Name; public int Qty; public decimal Price; }
+
+class Invoice
+{
+    public List&lt;InvoiceItem&gt; Items = new();
+    public decimal CalculateTotal()
+    {
+        decimal sum = 0;
+        foreach (var i in Items) sum += i.Qty * i.Price;
+        return sum;
+    }
+
+    // ❌ Mixed responsibilities:
+    public void SaveToDb() =&gt; Console.WriteLine("Saving to DB...");
+    public void Print() =&gt; Console.WriteLine($"Printing invoice total {CalculateTotal():C}");
+    public void EmailToCustomer(string email) =&gt; Console.WriteLine($"Email sent to {email}");
+}
+
+class Program
+{
+    static void Main()
+    {
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem { Name="Pen", Qty=2, Price=10 });
+        invoice.Print();
+    }
+}</code></pre>
+          <div class="codebar">Problem: printing, saving, emailing are mixed with calculation.</div>
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary><span class="tag">Step 1</span> Split responsibilities <span class="good">(SRP applied)</span></summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#srp1">Copy</button>
+          <pre><code id="srp1">using System;
+using System.Collections.Generic;
+
+class InvoiceItem { public string Name; public int Qty; public decimal Price; }
+
+class Invoice
+{
+    public List&lt;InvoiceItem&gt; Items = new();
+    public decimal CalculateTotal()
+    {
+        decimal sum = 0;
+        foreach (var i in Items) sum += i.Qty * i.Price;
+        return sum;
+    }
+}
+
+class InvoiceRepository
+{
+    public void Save(Invoice invoice) =&gt; Console.WriteLine("Saving to DB...");
+}
+
+class InvoicePrinter
+{
+    public void Print(Invoice invoice) =&gt; Console.WriteLine($"Printing invoice total {invoice.CalculateTotal():C}");
+}
+
+class EmailService
+{
+    public void Send(string email, Invoice invoice) =&gt; Console.WriteLine($"Email sent to {email}");
+}
+
+class Program
+{
+    static void Main()
+    {
+        var invoice = new Invoice();
+        invoice.Items.Add(new InvoiceItem { Name="Pen", Qty=2, Price=10 });
+
+        new InvoiceRepository().Save(invoice);
+        new InvoicePrinter().Print(invoice);
+        new EmailService().Send("a@b.com", invoice);
+    }
+}</code></pre>
+          <div class="codebar">Result: changing printing won’t touch DB or email.</div>
+        </div>
+        <ul class="bullets">
+          <li>Each class has exactly <b>one reason to change</b>.</li>
+          <li>Tests are smaller and clearer.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="ocp" class="card">
+      <h2>OCP — Open/Closed <span class="badge">Add new, don’t edit old</span></h2>
+      <p class="def">Software entities should be <b>open for extension</b> but <b>closed for modification</b>.</p>
+
+      <details class="step">
+        <summary><span class="tag">Step 0</span> Anti‑example — if/else soup</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#ocp0">Copy</button>
+          <pre><code id="ocp0">using System;
+
+enum ShippingMethod { Standard, Express }
+
+class Order { public decimal WeightKg; public ShippingMethod Method; }
+
+class ShippingCalculator
+{
+    public decimal Calculate(Order o)
+    {
+        if (o.Method == ShippingMethod.Standard) return o.WeightKg * 10;
+        else if (o.Method == ShippingMethod.Express) return o.WeightKg * 20;
+        // Adding Overnight? You must modify this method again. ❌
+        throw new NotSupportedException();
+    }
+}</code></pre>
+          <div class="codebar">Problem: every new option forces edits in the calculator.</div>
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary><span class="tag">Step 1</span> Strategy + registration (extend without modifying)</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#ocp1">Copy</button>
+          <pre><code id="ocp1">using System;
+using System.Collections.Generic;
+
+enum ShippingMethod { Standard, Express, Overnight }
+
+class Order { public decimal WeightKg; public ShippingMethod Method; }
+
+interface IShippingStrategy { ShippingMethod Method { get; } decimal Calculate(Order o); }
+
+class StandardShipping : IShippingStrategy
+{
+    public ShippingMethod Method =&gt; ShippingMethod.Standard;
+    public decimal Calculate(Order o) =&gt; o.WeightKg * 10;
+}
+class ExpressShipping : IShippingStrategy
+{
+    public ShippingMethod Method =&gt; ShippingMethod.Express;
+    public decimal Calculate(Order o) =&gt; o.WeightKg * 20;
+}
+
+// ✅ New option ADDED without touching existing code
+class OvernightShipping : IShippingStrategy
+{
+    public ShippingMethod Method =&gt; ShippingMethod.Overnight;
+    public decimal Calculate(Order o) =&gt; 50 + o.WeightKg * 25;
+}
+
+class ShippingCalculator
+{
+    private readonly Dictionary&lt;ShippingMethod, IShippingStrategy&gt; _map;
+    public ShippingCalculator(IEnumerable&lt;IShippingStrategy&gt; strategies)
+    {
+        _map = new();
+        foreach (var s in strategies) _map[s.Method] = s;
+    }
+    public decimal Calculate(Order o) =&gt; _map[o.Method].Calculate(o);
+}
+
+class Program
+{
+    static void Main()
+    {
+        var calc = new ShippingCalculator(new IShippingStrategy[]
+        {
+            new StandardShipping(), new ExpressShipping(), new OvernightShipping()
+        });
+
+        Console.WriteLine(calc.Calculate(new Order { WeightKg = 2, Method = ShippingMethod.Overnight }));
+    }
+}</code></pre>
+          <div class="codebar">Result: add a new strategy class; no changes in <code>ShippingCalculator</code>.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="lsp" class="card">
+      <h2>LSP — Liskov Substitution <span class="badge">Subtypes shouldn’t surprise</span></h2>
+      <p class="def">Subtypes must be usable wherever their base type is expected <b>without breaking behavior</b>.</p>
+
+      <details class="step">
+        <summary><span class="tag">Step 0</span> Anti‑example — forcing an Ostrich to fly</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#lsp0">Copy</button>
+          <pre><code id="lsp0">using System;
+
+class Bird { public virtual void Fly() =&gt; Console.WriteLine("Flap flap"); }
+class Sparrow : Bird { }
+class Ostrich : Bird { public override void Fly() =&gt; throw new NotSupportedException("I can't fly!"); } // ❌
+
+class Program { static void Main() { Bird b = new Ostrich(); b.Fly(); } } // Boom at runtime</code></pre>
+          <div class="codebar">Problem: base promises <code>Fly()</code> but subtype can’t honor it.</div>
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary><span class="tag">Step 1</span> Model capabilities (interfaces) instead of lies</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#lsp1">Copy</button>
+          <pre><code id="lsp1">using System;
+
+abstract class Bird { public string Name; public void Eat() =&gt; Console.WriteLine($"{Name} eats"); }
+interface IFlyable { void Fly(); }
+
+class Sparrow : Bird, IFlyable
+{
+    public void Fly() =&gt; Console.WriteLine($"{Name} flies");
+}
+class Ostrich : Bird { /* no Fly here */ }
+
+class BirdShow
+{
+    public void DoFlyingDemo(IFlyable birdThatFlies) =&gt; birdThatFlies.Fly();
+}
+
+class Program
+{
+    static void Main()
+    {
+        var show = new BirdShow();
+        var sparrow = new Sparrow { Name = "Jack" };
+        var ostrich = new Ostrich { Name = "Ozzy" };
+
+        show.DoFlyingDemo(sparrow); // ✅ OK
+        // show.DoFlyingDemo(ostrich); // won’t compile — good!
+    }
+}</code></pre>
+          <div class="codebar">Result: we only ask flying birds to fly. No broken promises.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="isp" class="card">
+      <h2>ISP — Interface Segregation <span class="badge">Small, focused interfaces</span></h2>
+      <p class="def">Clients shouldn’t be forced to depend on methods they don’t use.</p>
+
+      <details class="step">
+        <summary><span class="tag">Step 0</span> Anti‑example — a "god" interface</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#isp0">Copy</button>
+          <pre><code id="isp0">interface IMultiFunctionDevice { void Print(string t); void Scan(); void Fax(); }
+
+class BasicPrinter : IMultiFunctionDevice
+{
+    public void Print(string t) =&gt; Console.WriteLine($"Printing: {t}");
+    public void Scan() { /* noop ❌ */ }
+    public void Fax() { /* noop ❌ */ }
+}</code></pre>
+          <div class="codebar">Problem: <code>BasicPrinter</code> must implement useless members.</div>
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary><span class="tag">Step 1</span> Split and compose</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#isp1">Copy</button>
+          <pre><code id="isp1">using System;
+
+interface IPrinter { void Print(string text); }
+interface IScanner { void Scan(); }
+interface IFax { void Fax(); }
+
+class BasicPrinter : IPrinter
+{
+    public void Print(string text) =&gt; Console.WriteLine($"Printing: {text}");
+}
+
+class OfficeAllInOne : IPrinter, IScanner, IFax
+{
+    public void Print(string text) =&gt; Console.WriteLine("[AIO] Printing: " + text);
+    public void Scan() =&gt; Console.WriteLine("[AIO] Scanning...");
+    public void Fax() =&gt; Console.WriteLine("[AIO] Faxing...");
+}</code></pre>
+          <div class="codebar">Result: small devices implement only what they need; big ones compose.</div>
+        </div>
+      </details>
+    </section>
+
+    <section id="dip" class="card">
+      <h2>DIP — Dependency Inversion <span class="badge">Depend on abstractions</span></h2>
+      <p class="def">High‑level modules depend on <b>abstractions</b>, not concretions. Inject details.</p>
+
+      <details class="step">
+        <summary><span class="tag">Step 0</span> Anti‑example — hard‑coded dependency</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#dip0">Copy</button>
+          <pre><code id="dip0">using System;
+
+class SmtpEmailSender
+{
+    public void Send(string to, string body) =&gt; Console.WriteLine($"SMTP to {to}: {body}");
+}
+
+class NotificationService
+{
+    public void SendWelcome(string to)
+    {
+        var sender = new SmtpEmailSender(); // ❌ concrete dependency
+        sender.Send(to, "Welcome!");
+    }
+}</code></pre>
+          <div class="codebar">Problem: you can’t swap transport or test easily.</div>
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary><span class="tag">Step 1</span> Invert dependency + inject implementation</summary>
+        <div class="codewrap">
+          <button class="copybtn" data-copy="#dip1">Copy</button>
+          <pre><code id="dip1">using System;
+
+interface IMessageSender
+{
+    void Send(string to, string body);
+}
+
+class SmtpEmailSender : IMessageSender
+{
+    public void Send(string to, string body) =&gt; Console.WriteLine($"SMTP to {to}: {body}");
+}
+
+class SmsSender : IMessageSender
+{
+    public void Send(string to, string body) =&gt; Console.WriteLine($"SMS to {to}: {body}");
+}
+
+class NotificationService
+{
+    private readonly IMessageSender _sender;   // depends on abstraction
+    public NotificationService(IMessageSender sender) =&gt; _sender = sender;
+
+    public void SendWelcome(string to) =&gt; _sender.Send(to, "Welcome!");
+}
+
+class Program
+{
+    static void Main()
+    {
+        var emailService = new NotificationService(new SmtpEmailSender());
+        emailService.SendWelcome("a@b.com");
+
+        var smsService = new NotificationService(new SmsSender());
+        smsService.SendWelcome("+91-99999-00000");
+    }
+}</code></pre>
+          <div class="codebar">Result: swap implementations at composition time; testing becomes trivial.</div>
+        </div>
+      </details>
+    </section>
+
+    <section class="card">
+      <h2>How to run this as a mini‑course</h2>
+      <div class="hint">
+        <ol>
+          <li>One principle per session.</li>
+          <li>Start with <b>Step 0</b> (anti‑example). Ask: “What’s wrong?”</li>
+          <li>Show <b>Step 1</b> refactor. Ask: “What changed? What got easier?”</li>
+          <li>Add a quick <b>extension</b> (e.g., a new shipping method) so they feel the benefit.</li>
+          <li>Close with the one‑liner they can repeat.</li>
+        </ol>
+      </div>
+      <ul class="bullets">
+        <li><b>SRP</b>: One class, one job.</li>
+        <li><b>OCP</b>: Add new, don’t edit old.</li>
+        <li><b>LSP</b>: Subtypes shouldn’t surprise.</li>
+        <li><b>ISP</b>: Small, focused interfaces.</li>
+        <li><b>DIP</b>: Depend on interfaces, inject concretes.</li>
+      </ul>
+    </section>
+
+    <p class="footer">Built for beginners. Copy the snippets into fresh C# Console apps and run each step. — Made with ❤️</p>
+  </main>
+
+  <script>
+    // Copy buttons
+    document.querySelectorAll('.copybtn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const sel = btn.getAttribute('data-copy');
+        const code = document.querySelector(sel)?.innerText || '';
+        try { await navigator.clipboard.writeText(code); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1200); }
+        catch { btn.textContent = 'Press Ctrl+C'; setTimeout(() => btn.textContent = 'Copy', 1500); }
+      });
+    });
+
+    // Expand/Collapse all
+    const allDetails = () => Array.from(document.querySelectorAll('details.step'));
+    document.getElementById('expandAll').addEventListener('click', () => allDetails().forEach(d => d.open = true));
+    document.getElementById('collapseAll').addEventListener('click', () => allDetails().forEach(d => d.open = false));
+  </script>
+</body>
+</html>
