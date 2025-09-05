@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kafka Chapter 1 Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+    .quiz-box { max-width: 800px; margin:auto; background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,.2); }
+    h2 { color:#333; }
+    .option { padding:10px; margin:8px 0; border:1px solid #ccc; border-radius:5px; cursor:pointer; }
+    .option.correct { background:#c8f7c5; border-color:green; }
+    .option.wrong { background:#f7c5c5; border-color:red; }
+    #nextBtn { padding:10px 15px; margin-top:15px; background:#007BFF; color:white; border:none; border-radius:5px; cursor:pointer; display:none; }
+    #report { margin-top:20px; padding:15px; background:#eee; border-radius:10px; display:none; }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <button id="nextBtn">Next</button>
+    <div id="report"></div>
+  </div>
+
+<script>
+const quizData = [
+  {q:"What is a data pipeline?", options:["A database storing historical data","A system that moves data from source to analysis","A network protocol","A logging file"], ans:1, exp:"Pipelines move data from where it’s created → where it’s analyzed/output."},
+  {q:"Why is faster data movement important?", options:["It reduces storage cost","It makes organizations more agile and responsive","It avoids network congestion","It ensures no schema evolution is needed"], ans:1, exp:"Agility and responsiveness come from real-time data."},
+  {q:"In a pub/sub system, the sender:", options:["Directly sends to receivers","Classifies messages without knowing receivers","Stores messages permanently","Is also the broker"], ans:1, exp:"Publisher doesn’t target receivers directly."},
+  {q:"What is the role of a broker in pub/sub?", options:["Generate metrics","Facilitate message delivery","Apply schema evolution","Monitor consumers"], ans:1, exp:"Broker is the hub connecting publishers and subscribers."},
+  {q:"What happens with direct connections to many services?", options:["Easy scaling","Spaghetti architecture","No brokers needed","Faster delivery"], ans:1, exp:"Too many direct links = messy, fragile design."},
+  {q:"How do we reduce technical debt from direct connections?", options:["Add more point-to-point","Multiple isolated queues","Introduce a central service","Use polling"], ans:2, exp:"Central pub/sub service simplifies connections."},
+  {q:"Kafka is often described as:", options:["Distributed commit log","Batch processor","Dashboard tool","Database"], ans:0, exp:"Kafka = distributed commit log + streaming platform."},
+  {q:"Kafka provides durability by:", options:["Memory storage","Replication across partitions","Deleting after read","Avoiding schemas"], ans:1, exp:"Replication keeps data safe across brokers."},
+  {q:"What is a Kafka message?", options:["Always JSON","Like a DB row (byte array)","A broker config","Only Avro data"], ans:1, exp:"Kafka messages are opaque byte arrays."},
+  {q:"Why are messages batched?", options:["Reduce network overhead","Enforce schemas","Improve ordering","Disable replication"], ans:0, exp:"Batching increases throughput efficiency."},
+  {q:"Which serialization is most favored in Kafka?", options:["JSON","XML","Apache Avro","Protocol Buffers"], ans:2, exp:"Avro = compact, typed, schema evolution support."},
+  {q:"A Kafka topic is most like:", options:["Log file","DB table or folder","TCP socket","Consumer offset"], ans:1, exp:"Topic ≈ DB table / folder; holds partitions."},
+  {q:"Message ordering is guaranteed in:", options:["Entire topic","Within a partition","All consumers","Broker cluster"], ans:1, exp:"Only within each partition."},
+  {q:"A consumer group ensures:", options:["Each consumer reads all partitions","Each partition consumed by one consumer in group","Messages deleted after read","Producer always same broker"], ans:1, exp:"Partitions are split among group members."},
+  {q:"A Kafka broker is:", options:["DB table","Server handling storage & requests","Consumer group member","Avro schema"], ans:1, exp:"Broker = Kafka server."},
+  {q:"Replication in Kafka ensures:", options:["Load balancing","Durability & failover","Faster batching","Single broker ownership"], ans:1, exp:"Replication provides redundancy."},
+  {q:"Why use multiple clusters?", options:["Reduce consumer groups","Segregation, security, disaster recovery","Avoid partitions","Replace Avro"], ans:1, exp:"Multiple clusters help isolation and DR."},
+  {q:"MirrorMaker is used for:", options:["Compress schemas","Replicate between clusters","Monitor performance","Balance partitions"], ans:1, exp:"MirrorMaker copies data between clusters."},
+  {q:"In many queue systems, once consumed:", options:["Message deleted","Available to all consumers","Replicated","Compressed"], ans:0, exp:"Kafka allows multiple consumers unlike classic queues."},
+  {q:"Kafka retention means:", options:["Delete immediately","Store messages per time/size config","Producers decide retention","Forever store"], ans:1, exp:"Retention is configurable."},
+  {q:"Kafka scalability means:", options:["Redesign for growth","Grow brokers online without downtime","Consumers scale only","MirrorMaker required"], ans:1, exp:"Kafka scales horizontally without downtime."},
+  {q:"Kafka performance allows:", options:["Hours of delay","Sub-second latency","Only batch jobs","Manual partition assignment"], ans:1, exp:"Kafka can deliver with sub-second latency."},
+  {q:"What was the original Kafka use case?", options:["Email delivery","User activity tracking","Metrics alerting","Stream processing"], ans:1, exp:"Kafka was born at LinkedIn for activity tracking."},
+  {q:"Kafka messaging helps:", options:["Apps send notifications without duplicating logic","Replace consumer groups","Avoid schema evolution","Guarantee cross-topic ordering"], ans:0, exp:"Centralized messaging avoids duplication."},
+  {q:"Why is Kafka good for logs & metrics?", options:["Apps can produce same type of data","Enforces XML","Deletes after read","No retention"], ans:0, exp:"Multiple producers writing to same topic."},
+  {q:"A Kafka commit log allows:", options:["Only batch processing","Monitor latency","DB changes streamed & replayed","Schema-free storage"], ans:2, exp:"Commit log supports changelog streams."},
+  {q:"Stream processing with Kafka is like:", options:["Real-time MapReduce","Batch ETL jobs","DB replication","Storage only"], ans:0, exp:"Kafka stream processing = real-time MapReduce."},
+  {q:"Why was Kafka created at LinkedIn?", options:["Replace MySQL","Handle real-time metrics & activity","Fix XML parsing","Replace Hadoop"], ans:1, exp:"LinkedIn needed scalable real-time pipelines."},
+  {q:"Who created Kafka?", options:["Jeff Weiner & Neil Tyson","Jay Kreps, Neha Narkhede, Jun Rao","Larry Page & Sergey Brin","Bill Gates & Steve Jobs"], ans:1, exp:"The original Kafka creators were Jay, Neha, Jun."},
+  {q:"When did Kafka graduate Apache incubator?", options:["2008","2010","2012","2015"], ans:2, exp:"Kafka became full Apache project in 2012."},
+  {q:"Why is Kafka named so?", options:["Franz Kafka invented messaging","Optimized for writing + author liked Franz Kafka","Means fast in German","Acronym"], ans:1, exp:"Jay Kreps named it after Franz Kafka, sounded cool."}
+];
+
+let currentQ=0, score=0, wrongQs=[];
+const qEl=document.getElementById("question");
+const optEl=document.getElementById("options");
+const nextBtn=document.getElementById("nextBtn");
+const report=document.getElementById("report");
+
+function loadQuestion(){
+  let q=quizData[currentQ];
+  qEl.textContent=`Q${currentQ+1}. ${q.q}`;
+  optEl.innerHTML="";
+  q.options.forEach((opt,i)=>{
+    let div=document.createElement("div");
+    div.className="option";
+    div.textContent=opt;
+    div.onclick=()=>checkAnswer(div,i,q.ans,q.exp);
+    optEl.appendChild(div);
+  });
+}
+function checkAnswer(el,i,ans,exp){
+  Array.from(optEl.children).forEach(c=>c.onclick=null);
+  if(i===ans){ el.classList.add("correct"); score++; }
+  else { el.classList.add("wrong"); optEl.children[ans].classList.add("correct"); wrongQs.push({q:quizData[currentQ].q, exp}); }
+  nextBtn.style.display="inline-block";
+}
+nextBtn.onclick=()=>{
+  currentQ++;
+  if(currentQ<quizData.length){ loadQuestion(); nextBtn.style.display="none"; }
+  else showReport();
+};
+function showReport(){
+  qEl.style.display="none"; optEl.style.display="none"; nextBtn.style.display="none";
+  let msg=`<h3>Quiz Finished!</h3><p>Your Score: ${score}/${quizData.length}</p>`;
+  if(wrongQs.length>0){
+    msg+="<h4>Things to Improve:</h4><ul>";
+    wrongQs.forEach(w=> msg+=`<li><b>${w.q}</b><br/>${w.exp}</li>`);
+    msg+="</ul>";
+    msg+="<h4>Practice Question:</h4>";
+    msg+=`<p>Kafka guarantees ordering of messages within…</p>
+          <ul><li>Entire topic</li><li><b>Partition</b></li><li>All consumers</li><li>Broker cluster</li></ul>`;
+  } else { msg+="<p>Excellent! You mastered Chapter 1 🎉</p>"; }
+  report.innerHTML=msg; report.style.display="block";
+}
+loadQuestion();
+</script>
+</body>
+</html>
