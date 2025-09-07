@@ -91,7 +91,9 @@
   <script>
     // ---------------------------
     // 150 MCQs — grouped by topic
-    // Each item: {topic, q, options:[...], answer}
+    // Each item: {t (topic), q (question), o (options), a (index of correct option)}
+    // NOTE: Source data uses a=0 for all, but UI shuffles options so the correct
+    // letter varies (A/B/C/D) on every render.
     // ---------------------------
     const Q = [
       // Containers & Images (10)
@@ -269,10 +271,6 @@
       {t:'Service Mesh',q:'When to avoid mesh?',o:['Small/simple systems','Any prod system','If using RBAC','If using DNS'],a:0},
     ];
 
-    // Duplicate variants to reach exactly 150 questions (ensure count)
-    // Current Q length:
-    // Containers 10 + Core 15 + Pods 10 + Workloads 20 + Config 10 + Networking 20 + Storage 15 + Scaling 10 + Security 15 + Observability 10 + HA/DR 5 + Service Mesh 10 = 150 ✅
-
     // ---------------------------
     // Quiz state & logic (5-question batches with repeat-until-perfect)
     // ---------------------------
@@ -283,9 +281,8 @@
     let mistakesByTopic = {};      // {topic: count}
     let accuracyHistory = [];      // % per batch attempt
     let isMuted = false;           // TTS toggle
-    // New: per-batch voice flow state
     let answeredStates = [];       // boolean per question in current batch
-    let currentVoiceIdxInBatch = 0; // which question the TTS will read next           // TTS toggle
+    let currentVoiceIdxInBatch = 0; // which question the TTS will read next
 
     const elContainer = document.getElementById('question-container');
     const elNext = document.getElementById('next');
@@ -307,19 +304,28 @@
       // reset per-batch voice progress
       answeredStates = new Array(batch.length).fill(false);
       currentVoiceIdxInBatch = 0;
+
       batch.forEach((q, idx) => {
         const box = document.createElement('div');
         box.className = 'qbox';
-        box.innerHTML = `<h4>Q${batchStart + idx + 1}: ${q.q} <span class=\"pill\">${q.t}</span></h4>`;
+        box.innerHTML = `<h4>Q${batchStart + idx + 1}: ${q.q} <span class="pill">${q.t}</span></h4>`;
         const optsWrap = document.createElement('div');
         optsWrap.className = 'opts';
-        q.o.forEach((opt, oi) => {
+
+        // NEW: shuffle options per render & track correct index for THIS render
+        const indices = shuffle([0,1,2,3]);
+        const correctLocalIndex = indices.findIndex(i => i === q.a);
+        optsWrap.dataset.correctIndex = String(correctLocalIndex);
+
+        indices.forEach((origIdx, displayIdx) => {
           const btn = document.createElement('button');
           btn.className = 'opt';
-          btn.textContent = opt;
-          btn.addEventListener('click', () => handleAnswer(q, oi, btn, optsWrap, idx));
+          const letter = 'ABCD'[displayIdx];
+          btn.textContent = `${letter}. ${q.o[origIdx]}`;
+          btn.addEventListener('click', () => handleAnswer(q, displayIdx, btn, optsWrap, idx));
           optsWrap.appendChild(btn);
         });
+
         box.appendChild(optsWrap);
         elContainer.appendChild(box);
       });
@@ -332,17 +338,21 @@
       // disable all options for this question after one pick
       Array.from(optsWrap.children).forEach(b=>b.disabled=true);
       answered++;
-      if(choice === q.a){
+
+      const correctIndex = Number(optsWrap.dataset.correctIndex);
+      if(choice === correctIndex){
         btn.classList.add('correct');
         correctThisBatch++;
       } else {
         btn.classList.add('wrong');
-        // mark correct one for learning
-        Array.from(optsWrap.children)[q.a].classList.add('correct');
+        // mark correct one for learning (for THIS render)
+        const correctBtn = Array.from(optsWrap.children)[correctIndex];
+        if(correctBtn) correctBtn.classList.add('correct');
         mistakesByTopic[q.t] = (mistakesByTopic[q.t]||0)+1;
         updateByTopicChart();
       }
       updateStatus();
+
       // Mark this question as answered for voice progression
       answeredStates[idx] = true;
       // After answering, speak the next unanswered question (if any)
@@ -351,6 +361,7 @@
         currentVoiceIdxInBatch = nextIdx;
         speakQuestionAt(currentVoiceIdxInBatch);
       }
+
       if(answered === currentBatch().length){
         // evaluate batch
         const pct = Math.round((correctThisBatch/answered)*100);
