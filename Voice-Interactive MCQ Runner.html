@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voice-Interactive MCQ Runner · AKS/Kubernetes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Simple, readable scrollbar for code panes */
+    .nice-scroll::-webkit-scrollbar{height:8px;width:8px} 
+    .nice-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:6px}
+    .nice-scroll::-webkit-scrollbar-track{background:#f1f5f9}
+    .option-card{transition:transform .08s ease}
+    .option-card:active{transform:scale(.99)}
+    .pulse{animation:pulse 1.5s infinite}
+    @keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+  <div class="max-w-6xl mx-auto p-4 md:p-6">
+    <!-- Header -->
+    <header class="flex items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Voice-Interactive MCQ Runner</h1>
+        <p class="text-sm md:text-base text-slate-600">Built for AKS/Kubernetes study. Reads each question aloud, gives 22 seconds to answer, then reveals the rationale.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="helpBtn" class="px-3 py-2 rounded-xl bg-white shadow text-slate-700 hover:bg-slate-100">Help</button>
+        <a id="downloadSampleBtn" class="px-3 py-2 rounded-xl bg-slate-900 text-white hover:bg-black" download>Download Sample</a>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="mt-6">
+      <div class="flex gap-2 flex-wrap">
+        <button data-tab="prompt" class="tab-btn px-3 py-2 rounded-xl bg-slate-900 text-white">Prompt</button>
+        <button data-tab="quiz" class="tab-btn px-3 py-2 rounded-xl bg-white text-slate-900 shadow">Quiz Runner</button>
+        <button data-tab="results" class="tab-btn px-3 py-2 rounded-xl bg-white text-slate-900 shadow">Results</button>
+      </div>
+
+      <!-- Prompt Tab -->
+      <section id="tab-prompt" class="mt-4">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5">
+            <h2 class="text-lg font-semibold mb-2">Voice-Interactive MCQ Generator Prompt</h2>
+            <p class="text-sm text-slate-600 mb-3">Copy this into your LLM with your AKS notes to auto-generate interview-grade MCQs. Then paste the output (Markdown) into the Quiz Runner.</p>
+            <textarea id="promptText" class="w-full h-[420px] nice-scroll p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm" readonly></textarea>
+            <div class="mt-3 flex gap-2">
+              <button id="copyPromptBtn" class="px-3 py-2 rounded-xl bg-slate-900 text-white">Copy Prompt</button>
+              <button id="insertSampleBtn" class="px-3 py-2 rounded-xl bg-white border border-slate-200">Insert Sample MCQs → Runner</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5">
+            <h3 class="text-lg font-semibold mb-2">How it works</h3>
+            <ol class="list-decimal pl-6 space-y-2 text-slate-700 text-sm">
+              <li>Generate MCQs using the prompt on the left (or use the built-in sample).</li>
+              <li>Open <span class="font-medium">Quiz Runner</span>, paste MCQs into the editor, and click <span class="font-medium">Load MCQs</span>.</li>
+              <li>Pick a voice, set rate, and hit <span class="font-medium">Start</span>. Each question is spoken; you get <span class="font-medium">22 seconds</span> to answer.</li>
+              <li>After time or select an option, you’ll see the correct answer and rationale. Results accumulate automatically.</li>
+              <li>When done, view the <span class="font-medium">Concept Weight Map</span> on the <span class="font-medium">Results</span> tab and export CSV.</li>
+            </ol>
+            <div class="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+              <p class="mb-1 font-medium">Tip</p>
+              <p>Use the exact label format <code>[L3 – Networking]</code> or <code>[L2 - Security]</code>. The app parses Bloom level and Topic to build the weight map.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quiz Runner Tab -->
+      <section id="tab-quiz" class="mt-4 hidden">
+        <div class="grid lg:grid-cols-2 gap-4">
+          <!-- Left: Editor & Controls -->
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5 flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold">MCQ Markdown</h2>
+              <div class="flex gap-2">
+                <button id="loadBtn" class="px-3 py-2 rounded-xl bg-slate-900 text-white">Load MCQs</button>
+                <button id="clearBtn" class="px-3 py-2 rounded-xl bg-white border border-slate-200">Clear</button>
+              </div>
+            </div>
+            <textarea id="mcqInput" class="w-full h-[360px] nice-scroll p-3 bg-slate-50 rounded-xl border border-slate-200 text-sm" placeholder="Paste MCQs in the following Markdown structure:
+
+### Q1 [L2 – Networking]
+Which component schedules Pods onto nodes?
+A. kube-proxy
+B. kubelet
+C. scheduler
+D. controller-manager
+**Correct:** C
+**Rationale:** The kube-scheduler binds unscheduled pods to suitable nodes.
+"></textarea>
+
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-slate-600 mb-1">Voice</label>
+                <select id="voiceSelect" class="w-full rounded-xl border border-slate-200 p-2 text-sm"></select>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-600 mb-1">Speech Rate (0.8–1.2)</label>
+                <input id="rateInput" type="number" step="0.05" min="0.5" max="1.6" value="1" class="w-full rounded-xl border border-slate-200 p-2 text-sm" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-xs text-slate-600 mb-1">Seconds per Question</label>
+                <input id="secondsInput" type="number" min="5" max="120" value="22" class="w-full rounded-xl border border-slate-200 p-2 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs text-slate-600 mb-1">Shuffle Questions</label>
+                <select id="shuffleSelect" class="w-full rounded-xl border border-slate-200 p-2 text-sm">
+                  <option value="yes" selected>Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-slate-600 mb-1">Auto-Advance</label>
+                <select id="autoAdvanceSelect" class="w-full rounded-xl border border-slate-200 p-2 text-sm">
+                  <option value="yes" selected>On (after reveal)</option>
+                  <option value="no">Off</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button id="startBtn" class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Start</button>
+              <button id="pauseBtn" class="px-4 py-2 rounded-xl bg-white border border-slate-200">Pause</button>
+              <button id="prevBtn" class="px-4 py-2 rounded-xl bg-white border border-slate-200">Prev</button>
+              <button id="nextBtn" class="px-4 py-2 rounded-xl bg-white border border-slate-200">Next</button>
+              <!-- Reveal Now is optional with instant-reveal, keeping as utility -->
+              <button id="revealBtn" class="px-4 py-2 rounded-xl bg-indigo-600 text-white">Reveal Now</button>
+              <button id="resetBtn" class="px-4 py-2 rounded-xl bg-white border border-slate-200">Reset</button>
+            </div>
+          </div>
+
+          <!-- Right: Live Quiz -->
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-xs text-slate-600">Question</p>
+                <h3 id="qHeader" class="text-lg font-semibold">—</h3>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-slate-600">Timer</p>
+                <div class="flex items-center gap-2">
+                  <div id="countdown" class="text-xl font-mono">00</div>
+                  <div class="w-40 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div id="bar" class="h-full bg-emerald-500 w-0"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <p id="qText" class="text-slate-800">Load MCQs to begin.</p>
+            </div>
+
+            <div id="options" class="mt-4 grid gap-2"></div>
+
+            <div id="feedback" class="mt-4 hidden">
+              <div id="correctLine" class="text-sm font-medium"></div>
+              <div id="rationale" class="text-sm text-slate-700 mt-1"></div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between text-sm text-slate-600">
+              <div>
+                <span id="progress">0 / 0</span> • Score: <span id="score">0</span>
+              </div>
+              <div>
+                Topic: <span id="topicTag" class="px-2 py-1 rounded-full bg-slate-100 text-slate-700"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Tab -->
+      <section id="tab-results" class="mt-4 hidden">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5">
+            <h2 class="text-lg font-semibold mb-2">Concept Weight Map</h2>
+            <div id="weightMap" class="grid grid-cols-2 gap-2"></div>
+          </div>
+          <div class="bg-white rounded-2xl shadow p-4 md:p-5">
+            <h2 class="text-lg font-semibold mb-2">Session Summary</h2>
+            <div id="summary" class="text-sm text-slate-700 space-y-1"></div>
+            <div class="mt-3 flex gap-2">
+              <button id="exportCsvBtn" class="px-3 py-2 rounded-xl bg-slate-900 text-white">Export CSV</button>
+              <button id="resetResultsBtn" class="px-3 py-2 rounded-xl bg-white border border-slate-200">Reset Results</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ---------- State ----------
+    const state = {
+      questions: [], // parsed
+      current: 0,
+      secondsPerQ: 22,
+      remaining: 22,
+      timerId: null,
+      isRunning: false,
+      selected: null,
+      spoken: false,
+      score: 0,
+      results: [],
+      shuffle: true,
+      autoAdvance: true,
+      voices: [],
+      voiceUri: null,
+      rate: 1,
+      revealed: false // prevents double-reveal on fast clicks
+    };
+
+    // ---------- Elements ----------
+    const tabs = document.querySelectorAll('.tab-btn');
+    const promptTab = document.getElementById('tab-prompt');
+    const quizTab = document.getElementById('tab-quiz');
+    const resultsTab = document.getElementById('tab-results');
+
+    const promptText = document.getElementById('promptText');
+    const copyPromptBtn = document.getElementById('copyPromptBtn');
+    const insertSampleBtn = document.getElementById('insertSampleBtn');
+    const downloadSampleBtn = document.getElementById('downloadSampleBtn');
+
+    const mcqInput = document.getElementById('mcqInput');
+    const loadBtn = document.getElementById('loadBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    const voiceSelect = document.getElementById('voiceSelect');
+    const rateInput = document.getElementById('rateInput');
+    const secondsInput = document.getElementById('secondsInput');
+    const shuffleSelect = document.getElementById('shuffleSelect');
+    const autoAdvanceSelect = document.getElementById('autoAdvanceSelect');
+
+    const startBtn = document.getElementById('startBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const helpBtn = document.getElementById('helpBtn');
+
+    const qHeader = document.getElementById('qHeader');
+    const qText = document.getElementById('qText');
+    const optionsDiv = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const correctLine = document.getElementById('correctLine');
+    const rationale = document.getElementById('rationale');
+
+    const countdown = document.getElementById('countdown');
+    const bar = document.getElementById('bar');
+    const progress = document.getElementById('progress');
+    const topicTag = document.getElementById('topicTag');
+    const scoreEl = document.getElementById('score');
+
+    const weightMap = document.getElementById('weightMap');
+    const summary = document.getElementById('summary');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const resetResultsBtn = document.getElementById('resetResultsBtn');
+
+    // ---------- Tabs ----------
+    tabs.forEach(btn => btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('bg-slate-900','text-white'));
+      btn.classList.add('bg-slate-900','text-white');
+      const t = btn.dataset.tab;
+      promptTab.classList.toggle('hidden', t !== 'prompt');
+      quizTab.classList.toggle('hidden', t !== 'quiz');
+      resultsTab.classList.toggle('hidden', t !== 'results');
+    }));
+
+    // ---------- Prompt Text ----------
+    const promptStr = `**System:** You are an expert Kubernetes/Azure instructor and certified architect.
+**Goal:** Create a voice-based interactive quiz from the provided AKS notes.
+
+**Task:** Generate 30–50 multiple-choice questions across Bloom Levels L1–L6 (recall → evaluation).
+
+**Sections:** Basics, Intermediate, Advanced, Architect/Research.
+
+**For each question include:**
+• Bloom Level (L1–L6) and Topic Tag (e.g., 'Networking', 'Security', 'Autoscaling')
+• 4 options (A–D), exactly one correct
+• Short rationale (≤2 sentences)
+• Conversational, interview-realistic phrasing
+
+**Formatting (Markdown):**
+### Q12 [L3 – Networking]
+What is the primary difference between Azure CNI and Azure CNI Overlay in AKS?
+A. Overlay assigns pod IPs from VNet; CNI uses overlay CIDR
+B. CNI assigns pod IPs from VNet; Overlay uses its own CIDR
+C. Overlay uses NodePorts; CNI uses NAT
+D. CNI requires an Ingress Controller
+**Correct:** B
+**Rationale:** Azure CNI gives each pod a VNet IP; Overlay reduces IP pressure by allocating from a separate CIDR.
+
+**Voice Cues:** After printing each question and options, insert the literal line:
+**⏱ Voice Pause: 22 seconds**
+
+**After quiz:** Print a "Concept Weight Map" summarizing counts by topic (e.g., Networking 10, Security 8, Storage 5).
+
+**Optional Add-ons (append one):**
+• Add an answer-key table only, no rationales.
+• Export in CSV format for quiz import.
+• Focus 70% of questions on architecture and scaling.
+• Add one practical scenario question per section.
+• Generate SSML (TTS) output with <break time='22s'/> between questions.`;
+    promptText.value = promptStr;
+
+    copyPromptBtn.onclick = async () => {
+      await navigator.clipboard.writeText(promptStr);
+      copyPromptBtn.textContent = 'Copied ✓';
+      setTimeout(()=>copyPromptBtn.textContent='Copy Prompt',1000);
+    };
+
+    // ---------- Sample MCQs (short set to demonstrate) ----------
+    const sample = `### Q1 [L2 – Core]
+Which component schedules Pods onto nodes?
+A. kube-proxy
+B. kubelet
+C. scheduler
+D. controller-manager
+**Correct:** C
+**Rationale:** The kube-scheduler binds unscheduled pods to suitable nodes.
+
+### Q2 [L1 – Storage]
+Which interface standardizes volume plugins in Kubernetes?
+A. CRI
+B. CSI
+C. CNI
+D. OCI
+**Correct:** B
+**Rationale:** CSI = Container Storage Interface; it standardizes storage drivers.
+
+### Q3 [L3 – Networking]
+What is the primary difference between Azure CNI and Azure CNI Overlay in AKS?
+A. Overlay assigns pod IPs from VNet; CNI uses overlay CIDR
+B. CNI assigns pod IPs from VNet; Overlay uses its own CIDR
+C. Overlay uses NodePorts; CNI uses NAT
+D. CNI requires an Ingress Controller
+**Correct:** B
+**Rationale:** Azure CNI gives each pod a VNet IP; Overlay uses a separate pod CIDR.
+
+### Q4 [L4 – Security]
+A team wants to restrict pod-to-pod traffic. What should they use?
+A. PodDisruptionBudget
+B. LimitRange
+C. NetworkPolicy
+D. HorizontalPodAutoscaler
+**Correct:** C
+**Rationale:** NetworkPolicies define allowed/denied traffic flows between pods.
+
+### Q5 [L2 – Reliability]
+Which controller ensures the desired number of pod replicas is running?
+A. Job
+B. DaemonSet
+C. ReplicaSet
+D. StatefulSet
+**Correct:** C
+**Rationale:** ReplicaSet maintains the stable set of replica pods at any time.`;
+
+    insertSampleBtn.onclick = () => {
+      tabs.forEach(b => b.classList.remove('bg-slate-900','text-white'));
+      document.querySelector('[data-tab="quiz"]').classList.add('bg-slate-900','text-white');
+      promptTab.classList.add('hidden');
+      resultsTab.classList.add('hidden');
+      quizTab.classList.remove('hidden');
+      mcqInput.value = sample;
+    };
+
+    // Download sample as file
+    downloadSampleBtn.textContent = 'Sample MCQs.md';
+    const blob = new Blob([sample], {type:'text/markdown'});
+    downloadSampleBtn.href = URL.createObjectURL(blob);
+
+    // ---------- Parser ----------
+    function parseMCQs(md){
+      // Split by headings that look like ### Q<number> [Lx – Topic]
+      const blocks = md.split(/\n(?=###\s+Q\d+\s*\[)/g).filter(b=>b.trim().startsWith('###'));
+      const qs = [];
+      for(const b of blocks){
+        const lines = b.trim().split(/\n/);
+        const head = lines[0]; // heading
+        const headingMatch = head.match(/^###\s+Q(\d+)\s*\[(L\d)\s*[–-]\s*([^\]]+)\]/i);
+        if(!headingMatch) continue;
+        const qNum = Number(headingMatch[1]);
+        const bloom = headingMatch[2].toUpperCase();
+        const topic = headingMatch[3].trim();
+        // Find question line: next non-empty line after heading
+        let i=1; while(i<lines.length && !lines[i].trim()) i++;
+        const question = (lines[i]||'').trim();
+        // Options A-D lines until we hit **Correct:**
+        const opts = {};
+        let j=i+1;
+        while(j<lines.length && !/^\*\*Correct:\*\*/i.test(lines[j])){
+          const m = lines[j].match(/^[ABCD]\.\s*(.*)$/);
+          if(m){
+            const key = lines[j][0];
+            opts[key] = m[1].trim();
+          }
+          j++;
+        }
+        const correctLine = lines[j]||'';
+        const correctMatch = correctLine.match(/^\*\*Correct:\*\*\s*([ABCD])/i);
+        const correct = correctMatch ? correctMatch[1].toUpperCase() : null;
+        // Rationale optional next line(s) starting **Rationale:**
+        let rationaleText = '';
+        if(lines[j+1] && /^\*\*Rationale:\*\*/i.test(lines[j+1])){
+          rationaleText = lines.slice(j+1).join('\n').replace(/^\*\*Rationale:\*\*\s*/i,'').trim();
+        }
+        if(question && correct && Object.keys(opts).length===4){
+          qs.push({
+            num:qNum, bloom, topic, question,
+            options:[
+              {k:'A', v:opts['A']},
+              {k:'B', v:opts['B']},
+              {k:'C', v:opts['C']},
+              {k:'D', v:opts['D']}
+            ],
+            correct, rationale:rationaleText
+          });
+        }
+      }
+      return qs;
+    }
+
+    function shuffleArray(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+      }
+      return arr;
+    }
+
+    // ---------- TTS ----------
+    function loadVoices(){
+      const vs = window.speechSynthesis.getVoices();
+      state.voices = vs;
+      voiceSelect.innerHTML = '';
+      vs.forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value = v.voiceURI; opt.textContent = `${v.name} (${v.lang})${v.default?' • default':''}`;
+        voiceSelect.appendChild(opt);
+      });
+      // Prefer en-IN > en-GB > first
+      const preferred = vs.find(v=>/en-IN/i.test(v.lang)) || vs.find(v=>/en-GB/i.test(v.lang)) || vs[0];
+      if(preferred){
+        state.voiceUri = preferred.voiceURI; voiceSelect.value = preferred.voiceURI;
+      }
+    }
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    function speak(text){
+      if(!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const voice = state.voices.find(v=>v.voiceURI===state.voiceUri);
+      if(voice) u.voice = voice;
+      u.rate = state.rate;
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakQuestion(q){
+      const t = `${q.question}. Options: A: ${q.options[0].v}. B: ${q.options[1].v}. C: ${q.options[2].v}. D: ${q.options[3].v}. You have ${state.secondsPerQ} seconds.`;
+      speak(t);
+    }
+
+    function encourageSpeak(isCorrect){
+      const line = isCorrect ? "You are a great architect." : "You can be a great architect.";
+      speak(line);
+      return line;
+    }
+
+    // ---------- Rendering ----------
+    function renderQuestion(){
+      const q = state.questions[state.current];
+      if(!q){
+        qHeader.textContent = '—';
+        qText.textContent = 'No question loaded.';
+        optionsDiv.innerHTML = '';
+        feedback.classList.add('hidden');
+        progress.textContent = `${state.current} / ${state.questions.length}`;
+        topicTag.textContent = '';
+        return;
+      }
+      state.revealed = false; // reset reveal lock
+      qHeader.textContent = `Q${state.current+1} ${q.bloom} – ${q.topic}`;
+      qText.textContent = q.question;
+      topicTag.textContent = q.topic;
+      optionsDiv.innerHTML = '';
+      feedback.classList.add('hidden');
+      state.selected = null;
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-card w-full text-left px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50';
+        btn.innerHTML = `<span class="font-semibold mr-2">${opt.k}.</span>${opt.v}`;
+        btn.onclick = ()=> selectOption(opt.k); // instant reveal on click
+        optionsDiv.appendChild(btn);
+      });
+
+      progress.textContent = `${state.current+1} / ${state.questions.length}`;
+      scoreEl.textContent = String(state.score);
+
+      setTimer(state.secondsPerQ);
+      speakQuestion(q);
+    }
+
+    function selectOption(k){
+      if(state.revealed) return; // ignore extra taps after reveal
+      state.selected = k;
+      const btns = optionsDiv.querySelectorAll('button');
+      btns.forEach(b=>b.classList.remove('ring-2','ring-emerald-500'));
+      const idx = ['A','B','C','D'].indexOf(k);
+      if(btns[idx]) btns[idx].classList.add('ring-2','ring-emerald-500');
+      // Instant reveal to save time
+      reveal();
+    }
+
+    function reveal(){
+      if(state.revealed) return;
+      state.revealed = true;
+
+      clearInterval(state.timerId); state.timerId=null; state.isRunning=false;
+      const q = state.questions[state.current];
+      const correctIdx = ['A','B','C','D'].indexOf(q.correct);
+      const btns = optionsDiv.querySelectorAll('button');
+
+      btns.forEach((b,i)=>{
+        if(i===correctIdx){
+          b.classList.remove('border-slate-200');
+          b.classList.add('border-emerald-500','bg-emerald-50');
+        }
+        if(state.selected && ['A','B','C','D'][i]===state.selected && state.selected!==q.correct){
+          b.classList.add('border-rose-400','bg-rose-50');
+        }
+        b.disabled = true;
+      });
+
+      const correct = q.correct;
+      correctLine.textContent = `Correct: ${correct}`;
+      rationale.textContent = q.rationale || '';
+      feedback.classList.remove('hidden');
+
+      const isCorrect = state.selected===correct;
+
+      // Encouragement (voice + on-screen), deduped
+      const msg = encourageSpeak(isCorrect);
+      const oldExtra = feedback.querySelector('[data-encouragement]');
+      if(oldExtra) oldExtra.remove();
+      const extra = document.createElement('div');
+      extra.className = `mt-2 text-sm font-medium ${isCorrect ? 'text-emerald-700' : 'text-slate-700'}`;
+      extra.textContent = msg;
+      extra.setAttribute('data-encouragement','');
+      feedback.appendChild(extra);
+
+      // Results & scoring
+      state.results.push({
+        idx: state.current+1,
+        bloom: q.bloom,
+        topic: q.topic,
+        selected: state.selected||'',
+        correct,
+        ok: isCorrect?1:0
+      });
+      if(isCorrect) state.score++;
+      scoreEl.textContent = String(state.score);
+
+      // Auto advance after a short pause
+      if(state.autoAdvance){
+        setTimeout(()=>{ goNext(); }, 1500);
+      }
+    }
+
+    function setTimer(sec){
+      state.remaining = sec;
+      countdown.textContent = String(sec).padStart(2,'0');
+      bar.style.width = '100%';
+      const total = sec;
+      clearInterval(state.timerId);
+      state.isRunning = true;
+      state.timerId = setInterval(()=>{
+        state.remaining--;
+        countdown.textContent = String(Math.max(0,state.remaining)).padStart(2,'0');
+        bar.style.width = `${Math.max(0,(state.remaining/total)*100)}%`;
+        if(state.remaining<=0){
+          clearInterval(state.timerId); state.timerId=null; state.isRunning=false; reveal();
+        }
+      }, 1000);
+    }
+
+    function goPrev(){
+      if(state.current>0){
+        state.current--; renderQuestion();
+      }
+    }
+    function goNext(){
+      if(state.current < state.questions.length-1){
+        state.current++; renderQuestion();
+      } else {
+        // End of quiz → show results tab
+        tabs.forEach(b => b.classList.remove('bg-slate-900','text-white'));
+        document.querySelector('[data-tab="results"]').classList.add('bg-slate-900','text-white');
+        quizTab.classList.add('hidden');
+        promptTab.classList.add('hidden');
+        resultsTab.classList.remove('hidden');
+        buildResults();
+      }
+    }
+
+    function resetSession(){
+      clearInterval(state.timerId); state.timerId=null; state.isRunning=false;
+      state.current=0; state.selected=null; state.spoken=false; state.score=0; state.results=[]; state.revealed=false;
+      renderQuestion();
+    }
+
+    // ---------- Results ----------
+    function buildResults(){
+      // Weight map by topic
+      const map = new Map();
+      state.questions.forEach(q=>{
+        map.set(q.topic, (map.get(q.topic)||0)+1);
+      });
+      weightMap.innerHTML = '';
+      Array.from(map.entries()).sort((a,b)=>b[1]-a[1]).forEach(([topic,count])=>{
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between px-3 py-2 rounded-xl bg-slate-50 border border-slate-200';
+        row.innerHTML = `<span class="font-medium">${topic}</span><span class="text-slate-700">${count}</span>`;
+        weightMap.appendChild(row);
+      });
+
+      const total = state.questions.length;
+      const correct = state.results.reduce((s,r)=>s+(r.ok?1:0),0);
+      const pct = total? Math.round((correct/total)*100):0;
+      const byBloom = {};
+      state.questions.forEach(q=> byBloom[q.bloom]=(byBloom[q.bloom]||0)+1);
+
+      summary.innerHTML = `
+        <div>Total Questions: <span class="font-medium">${total}</span></div>
+        <div>Correct: <span class="font-medium">${correct}</span> (${pct}%)</div>
+        <div>Bloom Split: ${Object.entries(byBloom).map(([k,v])=>`<span class='px-2 py-1 bg-slate-100 rounded-full mr-1'>${k}: ${v}</span>`).join('')}</div>
+      `;
+    }
+
+    function exportCSV(){
+      const rows = [['#','Bloom','Topic','Selected','Correct','OK']];
+      state.results.forEach(r=> rows.push([r.idx,r.bloom,r.topic,r.selected,r.correct,r.ok]));
+      const csv = rows.map(r=>r.map(x=>`"${String(x).replaceAll('"','""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'mcq_results.csv'; a.click();
+    }
+
+    // ---------- Events ----------
+    loadBtn.onclick = () => {
+      const qs = parseMCQs(mcqInput.value);
+      if(qs.length===0){
+        alert('No questions parsed. Check the markdown structure.');
+        return;
+      }
+      state.shuffle = shuffleSelect.value==='yes';
+      state.autoAdvance = autoAdvanceSelect.value==='yes';
+      state.secondsPerQ = Math.max(5, parseInt(secondsInput.value)||22);
+      state.rate = Math.min(1.6, Math.max(0.5, parseFloat(rateInput.value)||1));
+
+      state.questions = state.shuffle ? shuffleArray(qs) : qs;
+      state.current = 0; state.score=0; state.results=[]; state.revealed=false;
+      renderQuestion();
+    };
+
+    clearBtn.onclick = () => { mcqInput.value = ''; };
+
+    startBtn.onclick = () => {
+      if(state.questions.length===0){ alert('Load MCQs first.'); return; }
+      // Resume timer (re-speak current question)
+      setTimer(state.remaining>0?state.remaining:state.secondsPerQ);
+      speakQuestion(state.questions[state.current]);
+    };
+
+    pauseBtn.onclick = () => {
+      if(state.timerId){ clearInterval(state.timerId); state.timerId=null; state.isRunning=false; }
+      if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
+
+    prevBtn.onclick = goPrev;
+    nextBtn.onclick = goNext;
+    revealBtn.onclick = reveal; // still available as a manual action
+    resetBtn.onclick = resetSession;
+
+    voiceSelect.onchange = () => { state.voiceUri = voiceSelect.value; };
+    rateInput.onchange = () => { state.rate = Math.min(1.6, Math.max(0.5, parseFloat(rateInput.value)||1)); };
+    secondsInput.onchange = () => { state.secondsPerQ = Math.max(5, parseInt(secondsInput.value)||22); };
+    shuffleSelect.onchange = () => { state.shuffle = shuffleSelect.value==='yes'; };
+    autoAdvanceSelect.onchange = () => { state.autoAdvance = autoAdvanceSelect.value==='yes'; };
+
+    exportCsvBtn.onclick = exportCSV;
+    resetResultsBtn.onclick = () => { state.results=[]; state.score=0; scoreEl.textContent='0'; buildResults(); };
+
+    helpBtn.onclick = () => {
+      alert('1) Generate MCQs with the Prompt tab or use Sample.\n2) Paste into Quiz Runner and Load.\n3) Choose a voice and rate.\n4) Start: each question is read aloud; selecting any option instantly reveals.\n5) Results tab shows weight map and lets you export CSV.');
+    };
+
+    // Auto-fill sample in editor on first load for convenience
+    mcqInput.value = sample;
+  </script>
+</body>
+</html>
